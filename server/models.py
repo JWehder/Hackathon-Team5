@@ -13,16 +13,27 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String, nullable=False, unique=True, index=True)
     _password = db.Column(db.String)
     first_name = db.Column(db.String, nullable=False)
+    linked_in = db.Column(db.String)
     last_name = db.Column(db.String, nullable=False)
-    disability_type = db.Column(db.String, nullable=False)
-    courses = db.relationship('Course', backref='user', cascade="all, delete-orphan")
-    lessons = db.relationship('Lesson', backref='user')
+    disability = db.Column(db.String, nullable=False)
+    country = db.Column(db.String)
+    courses = db.relationship('Course', backref='users', cascade="all, delete-orphan")
+    lessons = db.relationship('Lesson', backref='users')
 
     @validates('email')
     def validate_email(self, key, address):
         pattern = "([\w\.]+@[A-Za-z]+\.[A-Za-z]+)"
         if not re.match(pattern, address):
             raise AttributeError('email addresses must be in standard format: john.doe@example.com')
+
+    # ensure it is a disability we support
+    @validates('disability')
+    def validate_approved_disability(self, key, disability):
+        # disability_list = [determine list of disabilities]
+        # coniditonal to check if disability is in list
+        # throw error if not
+        # return disability if it is in list
+        disability_list = []
 
     @validates('_password')
     def validate_password(self, key, password):
@@ -62,12 +73,13 @@ class User(db.Model, SerializerMixin):
 class Course(db.Model, SerializerMixin):
     __tablename__ = 'courses'
 
-    users = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key = True)
     description = db.Column(db.String, nullable=False)
+    caption = db.Column(db.String, nullable=False)
     lessons = db.relationship('Lesson', backref='course', cascade="all, delete-orphan")
-    students = db.relationship('Student', backref='course')
+    users = db.relationship('User', backref='courses')
 
-    # ensure there are no 
+
     @validates('description')
     def validate_length_description(self, key, description):
         if len(description) < 50:
@@ -78,8 +90,10 @@ class Lesson(db.Model, SerializerMixin):
     __tablename__ = 'lessons'
 
     id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String)
-    text_content = db.Column(db.Text)
-    name = db.Column(db.String)
-
+    description = db.Column(db.String, nullable=False)
+    text_content = db.Column(db.Text, nullable=False)
+    completed = db.Column(db.Boolean, default=False)
+    name = db.Column(db.String, nullable=False, unique=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
