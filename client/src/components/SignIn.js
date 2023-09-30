@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react' 
 import {
   Flex,
   Box,
@@ -18,9 +18,9 @@ import {
 } from '@chakra-ui/react'
 import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
-import { AiOutlineEye } from 'react-icons/ai'
-import { AiOutlineEyeInvisible } from 'react-icons/ai'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
+import SignUp from './SignUp'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
@@ -28,7 +28,7 @@ export default function SimpleCard() {
         email: '',
         password: ''
     })
-    
+
   return (
     <Flex
       minH='100vh'
@@ -80,12 +80,11 @@ export default function SimpleCard() {
                 <InputGroup>
                     <Input type={show ? 'text' : 'password'} value={userInfo.password}
                         onChange={(e) => setUserInfo({...userInfo, password: e.target.value})}/>
-                    <InputRightElement width="4.5rem">
+                    <InputRightElement width='4.5rem'>
                         <Button h="1.75rem" size="sm" 
-                                color='gray'
-                                _hover={{bg: 'gray.200'}}
+                                variant='ghost'
                                 onClick={() => setShow(!show)}>
-                        {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                        {show ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
                         </Button>
                     </InputRightElement>
                 </InputGroup>
@@ -107,7 +106,7 @@ export default function SimpleCard() {
                 }}>
                 Sign in
               </Button>
-                <Text textAlign='center'>Don't have an account?  <Link color='blue.400'>Sign Up</Link>
+                <Text textAlign='center'>Don't have an account?  <Link href='/signup' color='blue.400'>Sign Up</Link>
               </Text>
             </Stack>
           </Stack>
