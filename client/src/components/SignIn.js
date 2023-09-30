@@ -24,25 +24,29 @@ import Logo from '../assets/main-logo.png'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
+
   return (
     <Flex
       minH='100vh'
       align='center'
       justify='center'
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing='8' mx='auto' maxW='2xl' py='12' px='6'>
+      bg={useColorModeValue('gray.50', 'gray.800')}
+      >
+      <Stack spacing='8' mx='auto' py='12' px='6'>
         <Box
-          rounded={'lg'}
+          rounded='lg'
           bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
+          boxShadow='lg'
           p={8}
+          maxW={["100%", "100%", "2xl"]}
+          width={["100%", "100%", "500px"]}
           >
              <Box mx='auto' width='150px' marginBottom='5'>
                 <img src={Logo} alt='logo' width='150' height='150'/>
              </Box>
             <Stack align='center'>
-                <Heading fontSize={'3xl'}>Sign in</Heading>
-                <Text fontSize={'md'} color={'gray.600'}>
+                <Heading fontSize='3xl'>Sign in</Heading>
+                <Text fontSize='md' color={'gray.600'}>
                     Please sign in first to access all features
                 </Text>
                 <Button borderRadius='100'
@@ -62,7 +66,7 @@ export default function SimpleCard() {
                     <Text padding="4">OR</Text>
                 <Divider />
             </Flex>
-          <Stack spacing={4}>
+          <Stack spacing='4'>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
               <Input type="email" />
@@ -73,7 +77,7 @@ export default function SimpleCard() {
                     <Input type={show ? 'text' : 'password'}/>
                     <InputRightElement width="4.5rem">
                         <Button h="1.75rem" size="sm" 
-                                color={'gray'}
+                                color='gray'
                                 _hover={{bg: 'gray.200'}}
                                 onClick={() => setShow(!show)}>
                         {show ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
@@ -81,24 +85,24 @@ export default function SimpleCard() {
                     </InputRightElement>
                 </InputGroup>
             </FormControl>
-            <Stack spacing={10}>
+            <Stack spacing='10'>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
                 align={'start'}
                 justify={'space-between'}>
-                <Checkbox>Keep Me Signed In</Checkbox>
+                <Checkbox>Keep me signed in</Checkbox>
                 <Text> <Link color={'blue.400'}>Forgot password?</Link></Text>
               </Stack>
               <Button
-                borderRadius={100}
-                bg={'#2F3CED'}
-                color={'white'}
+                borderRadius='100'
+                bg='#2F3CED'
+                color='white'
                 _hover={{
                   bg: 'blue.500',
                 }}>
                 Sign in
               </Button>
-              <Text>Don't have an account?  <Link color={'blue.400'}>Sign Up</Link>
+                <Text textAlign='center'>Don't have an account?  <Link color='blue.400'>Sign Up</Link>
               </Text>
             </Stack>
           </Stack>
