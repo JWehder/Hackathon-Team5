@@ -24,7 +24,11 @@ import Logo from '../assets/main-logo.png'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
-
+    const [userInfo, setUserInfo] = useState({
+        email: '',
+        password: ''
+    })
+    
   return (
     <Flex
       minH='100vh'
@@ -69,12 +73,13 @@ export default function SimpleCard() {
           <Stack spacing='4'>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input type="email" value={userInfo.email} onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}/>
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
                 <InputGroup>
-                    <Input type={show ? 'text' : 'password'}/>
+                    <Input type={show ? 'text' : 'password'} value={userInfo.password}
+                        onChange={(e) => setUserInfo({...userInfo, password: e.target.value})}/>
                     <InputRightElement width="4.5rem">
                         <Button h="1.75rem" size="sm" 
                                 color='gray'
