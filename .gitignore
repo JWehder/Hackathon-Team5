@@ -1,0 +1,4 @@
+/server/local_env.yml
+credentials.yml.enc
+/server/text_to_speech_credentials.json
+.env
