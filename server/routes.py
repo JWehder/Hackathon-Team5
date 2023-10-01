@@ -143,4 +143,25 @@ def authorized_facebook():
     # You should implement session management or JWT token creation here.
     return jsonify({"message": "Login successful"}), 200
 
+@root_bp.route('/synthesize_speech')
+def synthesize_speech(self):
+        text = request.get_json()['text']
+        lesson_name = request.get_json()['lesson_name']
 
+        try:
+            client = texttospeech.TextToSpeechClient()
+            synthesis_input = texttospeech.SynthesisInput(text=text)
+            voice = texttospeech.VoiceSelectionParams(language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL)
+            audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.LINEAR16)
+            
+            response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
+
+            filename = f"{lesson_name}.wav"
+            with open(filename, "wb") as out:
+                out.write(response.audio_content)
+                print(f'printing to file: {filename}')
+
+            return send_file(filename, as_attachment=True, mimetype='audio/wav')
+
+        except Exception as e:
+            return jsonify({"error": str(e)})
