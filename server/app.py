@@ -1,9 +1,13 @@
-from flask import request, session, jsonify
+from flask import request, session, jsonify, send_file
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
+from google.cloud import texttospeech
+import os
 
 from config import app, db, api
 from models import User
+
+os.environ['GOOGLE_APP_CREDENTIALS'] = "text_to_speech_credentials.json"
 
 class Signup(Resource):
     def post(self):
@@ -35,3 +39,37 @@ class Signup(Resource):
             return user_dict, 201
         except IntegrityError:
             return {'error': 'Not Authorized'}, 422
+
+class TextToVoice(Resource):
+    # used generally for synthesizing text
+    # in a typical application, we would input this into each lesson
+    # However, we're attempting to maintain our free credits with GCP
+    # so this will suffice
+    def post(self):
+        text = request.get_json()['text']
+        lesson_name = request.get_json()['lesson_name']
+
+        try:
+            client = texttospeech.TextToSpeechClient()
+            synthesis_input = texttospeech.SynthesisInput(text=text)
+            voice = texttospeech.VoiceSelectionParams(language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL)
+            audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.LINEAR16)
+            
+            response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
+
+            filename = f"{lesson_name}.wav"
+            with open(filename, "wb") as out:
+                out.write(response.audio_content)
+
+            return send_file(filename, as_attachment=True, mimetype='audio/wav')
+
+        except Exception as e:
+            return jsonify({"error": str(e)})
+
+
+
+
+api.add_resource(Signup, '/signup', endpoint='signup')
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
