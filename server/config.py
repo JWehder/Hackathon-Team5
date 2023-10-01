@@ -22,3 +22,11 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 
 api = Api(app)
+
+from routes import root_bp
+from routes import lesson_bp
+from routes import course_bp
+
+app.register_blueprint(root_bp)
+app.register_blueprint(lesson_bp)
+app.register_blueprint(course_bp)
