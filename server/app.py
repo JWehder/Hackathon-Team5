@@ -3,11 +3,20 @@ from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from google.cloud import texttospeech
 import os
+import google.generativeai as palm
+from dotenv import load_dotenv
 
 from config import app, db, api
 from models import User
 
-os.environ['GOOGLE_APP_CREDENTIALS'] = "text_to_speech_credentials.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech_credentials.json"
+
+load_dotenv()
+
+palm.configure(api_key=os.getenv['PALM_API_KEY'])
+
+response = palm.generate_text(prompt="The opposite of hot is")
+print(response.result)
 
 class Signup(Resource):
     def post(self):
@@ -60,6 +69,7 @@ class TextToVoice(Resource):
             filename = f"{lesson_name}.wav"
             with open(filename, "wb") as out:
                 out.write(response.audio_content)
+                print(f'printing to file: {filename}')
 
             return send_file(filename, as_attachment=True, mimetype='audio/wav')
 
@@ -70,6 +80,7 @@ class TextToVoice(Resource):
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(TextToVoice, '/synthesize_speech', endpoint='text_synthesis')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
