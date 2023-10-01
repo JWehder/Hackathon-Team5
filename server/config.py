@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, request, jsonify, redirect, url_for
+from authlib.integrations.flask_client import OAuth
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_restful import Api
@@ -24,3 +25,13 @@ db.init_app(app)
 bcrypt = Bcrypt(app)
 
 api = Api(app)
+
+oauth = OAuth(app)
+
+from routes import root_bp
+from routes import lesson_bp
+from routes import course_bp
+
+app.register_blueprint(root_bp)
+app.register_blueprint(lesson_bp)
+app.register_blueprint(course_bp)
