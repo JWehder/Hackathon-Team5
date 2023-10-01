@@ -3,7 +3,7 @@ from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 
 from config import app, db, api
-from models import User, Recipe
+from models import User
 
 class Signup(Resource):
     def post(self):
@@ -11,9 +11,12 @@ class Signup(Resource):
 
         try: 
             user = User(
-                username=json.get('username'),
-                image_url=json.get('image_url'),
-                bio=json.get('bio')
+                email=json.get('email'),
+                linked_in=json.get('linked_in'),
+                first_name=json.get('first_name'),
+                last_name=json.get('last_name'),
+                disability=json.get('disability'),
+                country=json.get('country')
             )
             user.password_hash = json.get('password')
             db.session.add(user)
@@ -22,9 +25,12 @@ class Signup(Resource):
             session['user_id'] = user.id
             user_dict = {
                 'id': user.id,
-                'username': user.username,
-                'image_url': user.image_url,
-                'bio': user.bio
+                'email': user.email,
+                'linked_in': user.linked_in,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'disability': user.disability,
+                'country': user.country
             }
             return user_dict, 201
         except IntegrityError:
