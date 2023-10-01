@@ -3,9 +3,13 @@ from flask import Response, make_response, jsonify, Blueprint
 from sqlalchemy.types import DateTime
 from sqlalchemy.sql.functions import now
 import requests
+import os
+from google.cloud import texttospeech
 
 from models import User, Lesson, Course
 from config import db, bcrypt
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech_credentials.json"
 
 root_bp = Blueprint("root_bp", __name__)
 lesson_bp = Blueprint("lesson_bp", __name__)
@@ -145,6 +149,10 @@ def authorized_facebook():
 
 @root_bp.route('/synthesize_speech')
 def synthesize_speech(self):
+        # used generally for synthesizing text
+        # in a typical application, we would input this into each lesson
+        # However, we're attempting to maintain our free credits with GCP
+        # so this will suffice
         text = request.get_json()['text']
         lesson_name = request.get_json()['lesson_name']
 
