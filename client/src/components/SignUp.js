@@ -23,24 +23,26 @@ export default function SignupCard() {
 
   return (
     <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
+      minH='100vh'
+      align='center'
+      justify='center'
       bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+      <Stack spacing='8' mx='auto' maxW='lg' py='12' px='6'>
         <Box
-          rounded={'lg'}
+          rounded='lg'
           bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
+          boxShadow='lg'
+          maxW={["100%", "100%", "2xl"]}
+          width={["100%", "100%", "500px"]}
           p={8}>
              <Box mx='auto' width='150px' marginBottom='5'>
                 <img src={Logo} alt='logo' width='150' height='150'/>
              </Box>
-            <Stack align={'center'} marginBottom='5'>
-                <Heading fontSize={'4xl'} textAlign={'center'}>
+            <Stack align='center' marginBottom='5'>
+                <Heading fontSize='4xl' textAlign='center'>
                     Sign up
                 </Heading>
-                <Text fontSize={'lg'} color={'gray.600'}>
+                <Text fontSize='lg' color='gray.600'>
                     to enjoy all of our cool features 
                 </Text>
             </Stack>
@@ -53,7 +55,7 @@ export default function SignupCard() {
                 </FormControl>
               </Box>
               <Box>
-                <FormControl id="lastName">
+                <FormControl id="lastName" isRequired>
                   <FormLabel>Last Name</FormLabel>
                   <Input type="text" />
                 </FormControl>
@@ -70,7 +72,7 @@ export default function SignupCard() {
                 <InputRightElement width="4.5rem">
                   <Button
                     h="1.75rem" size="sm"
-                    variant={'ghost'}
+                    variant='ghost'
                     onClick={() => setShowPassword((showPassword) => !showPassword)}>
                     {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
                   </Button>
@@ -83,7 +85,7 @@ export default function SignupCard() {
                 loadingText="Submitting"
                 size="lg"
                 bg='#2F3CED'
-                color={'white'}
+                color='white'
                 _hover={{
                   bg: 'blue.500',
                 }}>
@@ -91,8 +93,8 @@ export default function SignupCard() {
               </Button>
             </Stack>
             <Stack pt={6}>
-              <Text align={'center'}>
-                Already a user? <Link href='/' color={'blue.400'}>Login</Link>
+              <Text align='center'>
+                Already a user? <Link href='/' color='blue.400'>Login</Link>
               </Text>
             </Stack>
           </Stack>
