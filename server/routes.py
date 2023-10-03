@@ -1,10 +1,11 @@
 from datetime import datetime
-from flask import Response, make_response, jsonify, Blueprint
+from flask import Response, make_response, jsonify, Blueprint, request, send_file
 from sqlalchemy.types import DateTime
 from sqlalchemy.sql.functions import now
 import requests
 import os
 from google.cloud import texttospeech
+from config import app
 
 from models import User, Lesson, Course
 from config import db, bcrypt
@@ -33,7 +34,7 @@ def login_with_email():
     password = data['password']
 
     # Check if the user exists in your data store.
-    user = next((user for user in users if user['username'] == username), None)
+    user = next((User for user in User.all if user.email == email), None)
 
     if user is None or user['password'] != password:
         return jsonify({"error": "Invalid username or password"}), 401
@@ -147,7 +148,7 @@ def authorized_facebook():
     # You should implement session management or JWT token creation here.
     return jsonify({"message": "Login successful"}), 200
 
-@root_bp.route('/synthesize_speech')
+@root_bp.route('/synthesize_speech', methods=['POST'])
 def synthesize_speech(self):
         # used generally for synthesizing text
         # in a typical application, we would input this into each lesson
@@ -173,3 +174,10 @@ def synthesize_speech(self):
 
         except Exception as e:
             return jsonify({"error": str(e)})
+
+@root_bp.route('/synthesize_speech')
+def create_text(self):
+
+    try:
+
+    except:
