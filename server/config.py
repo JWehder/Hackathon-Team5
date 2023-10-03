@@ -31,6 +31,7 @@ oauth = OAuth(app)
 from routes import root_bp
 from routes import lesson_bp
 from routes import course_bp
+from models import User, Lesson, Course
 
 app.register_blueprint(root_bp)
 app.register_blueprint(lesson_bp)

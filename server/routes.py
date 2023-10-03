@@ -6,8 +6,8 @@ import requests
 import os
 from google.cloud import texttospeech
 
-from models import User, Lesson, Course
-from config import db, bcrypt
+
+from config import db, bcrypt, app
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech_credentials.json"
 
@@ -173,3 +173,6 @@ def synthesize_speech(self):
 
         except Exception as e:
             return jsonify({"error": str(e)})
+        
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
