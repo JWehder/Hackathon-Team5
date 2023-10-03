@@ -166,6 +166,12 @@ class Lesson(Base):
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    def to_dict(self, visited=None):
+        serialized = super().to_dict(visited)
+        serialized.pop('user', None)
+        return serialized
+
     def __repre__(self):
         return f'Lesson {self.id}, description: {self.description}, course: {self.course_id}'
+
 
