@@ -29,6 +29,24 @@ export default function SimpleCard() {
         password: ''
     })
 
+    function handleLogin(e) {
+      e.preventDefault()
+      fetch('http://localhost:5555/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userInfo)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        localStorage.setItem('token', data.token)
+      })
+      .catch(error => console.error('Error:', error));
+      console.log(userInfo) 
+    }
+
   // function generateSpeech() {
   //   fetch('http://localhost:5555/synthesize_speech', {
   //   method: 'POST',
@@ -91,6 +109,7 @@ export default function SimpleCard() {
                     <Text padding="4">OR</Text>
                 <Divider />
             </Flex>
+          <form onSubmit={handleLogin}>
           <Stack spacing='4'>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
@@ -110,6 +129,7 @@ export default function SimpleCard() {
                     </InputRightElement>
                 </InputGroup>
             </FormControl>
+            
             <Stack spacing='10'>
               <Stack
                 direction={{ base: 'column', sm: 'row' }}
@@ -119,6 +139,7 @@ export default function SimpleCard() {
                 <Text> <Link color={'blue.400'}>Forgot password?</Link></Text>
               </Stack>
               <Button
+                type='submit'
                 borderRadius='100'
                 bg='#2F3CED'
                 color='white'
@@ -131,6 +152,7 @@ export default function SimpleCard() {
               </Text>
             </Stack>
           </Stack>
+          </form>
         </Box>
       </Stack>
     </Flex>

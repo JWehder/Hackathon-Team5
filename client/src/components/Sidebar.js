@@ -83,7 +83,6 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
   return (
     <Box
       as="a"
-    //   href={linkName}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
       onClick={() => setSelectedLink(linkName)}>
@@ -95,7 +94,7 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: '#2F4CED',
           color: 'white',
         }}
         {...rest}>
@@ -115,7 +114,7 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
   )
 }
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({ onOpen, selectedLink, ...rest }) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -134,10 +133,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-
-      <Box mx='auto' width='150px'>
-        <img src={Logo} alt='logo' width='150' height='150'/>
-      </Box>
 
       <HStack spacing={{ base: '0', md: '6' }}>
         <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />
@@ -201,7 +196,7 @@ const SidebarWithHeader = () => {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} selectedLink={selectedLink}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
           {selectedLink === 'Home' && <Home />}
