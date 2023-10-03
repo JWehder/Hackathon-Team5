@@ -2,10 +2,43 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from sqlalchemy.exc import IntegrityError
+import re
 
 from config import db, bcrypt
 
-class User(db.Model, SerializerMixin):
+class Base(db.Model, SerializerMixin):
+    __abstract__ = True
+    # include_timestamps = False
+
+    def to_dict(self, visited=None, exclude=None):
+        if visited is None:
+            visited = set()
+        if exclude is None:
+            exclude = set()
+
+        if self in visited:
+            return {}
+
+        visited.add(self)
+
+        serialized = {}
+        for column in self.__table__.columns:
+            serialized[column.name] = getattr(self, column.name)
+
+        for relationship in self.__mapper__.relationships:
+            if relationship.key not in exclude:
+                related_obj = getattr(self, relationship.key)
+                if related_obj is None:
+                    serialized[relationship.key] = None
+                elif isinstance(related_obj, list):
+                    serialized[relationship.key] = [obj.to_dict(visited) for obj in related_obj]
+                else:
+                    serialized[relationship.key] = related_obj.to_dict(visited)
+
+        visited.remove(self)
+        return serialized
+
+class User(Base):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key = True)
@@ -29,7 +62,7 @@ class User(db.Model, SerializerMixin):
     @validates('disability')
     def validate_approved_disability(self, key, disability):
         # disability_list = [determine list of disabilities]
-        # coniditonal to check if disability is in list
+        # conditonal to check if disability is in list
         # throw error if not
         # return disability if it is in list
         disability_list = []
@@ -65,11 +98,35 @@ class User(db.Model, SerializerMixin):
     def authenticate(self, password):
         return bcrypt.check_password_hash(
             self._password, password.encode('utf-8'))
+        
+    def to_dict(self, visited=None):
+        serialized = super().to_dict(visited, exclude={'courses', 'lessons'})
+        serialized.pop('password_hash', None)
+        serialized['courses'] = [
+            {
+                'id': course.id,
+                'name': course.name,
+                'caption': course.caption,
+                'description': course.description,
+                'lessons': [
+                    {
+                        'id': lesson.id,
+                        'name': lesson.name,
+                        'description': lesson.description,
+                        'text_content': lesson.text_content,
+
+                    }
+                    for lesson in course.lessons
+                ]
+            }
+            for course in self.courses
+        ]
+        return serialized
 
     def __repr__(self):
-        return f'User {self.first_name} {self.last_name}, ID: {self.id}'
+        return f'User {self.id}, Name: {self.first_name} {self.last_name}, ID: {self.id}'
 
-class Course(db.Model, SerializerMixin):
+class Course(Base):
     __tablename__ = 'courses'
 
     id = db.Column(db.Integer, primary_key = True)
@@ -85,14 +142,30 @@ class Course(db.Model, SerializerMixin):
             raise AttributeError('Please provide a more detailed description.')
         return description
 
-class Lesson(db.Model, SerializerMixin):
+    def to_dict(self, visited=None):
+        serialized = super().to_dict(visited, exclude={'lessons'})
+        serialized['lessons'] = [
+            {
+            'id': lesson.id, 
+            'description': lesson.description, 
+            'text_content': lesson.text_content
+            } for lesson in self.lessons]
+        return serialized
+        
+
+    def __repre__(self):
+        return f'Course {self.id}, caption: {self.caption}, Description: {self.description}'
+
+class Lesson(Base):
     __tablename__ = 'lessons'
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String, nullable=False)
     text_content = db.Column(db.Text, nullable=False)
-    completed = db.Column(db.Boolean, default=False)
     name = db.Column(db.String, nullable=False, unique=True)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __repre__(self):
+        return f'Lesson {self.id}, description: {self.description}, course: {self.course_id}'
 
