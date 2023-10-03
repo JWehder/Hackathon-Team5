@@ -50,15 +50,7 @@ class Signup(Resource):
             db.session.commit()
 
             session['user_id'] = user.id
-            user_dict = {
-                'id': user.id,
-                'email': user.email,
-                'linked_in': user.linked_in,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'disability': user.disability,
-                'country': user.country
-            }
+            user_dict = user.to_dict()
             return user_dict, 201
         except IntegrityError:
             return {'error': 'Not Authorized'}, 422
@@ -73,10 +65,11 @@ class Login(Resource):
         if not req_values or 'email' not in req_values or 'password' not in req_values:
             return jsonify({"error": "Invalid request"}), 400
 
-        user = User.all.query.filter_by(email=req_values['email']).first()
+        user = User.query.filter_by(email=req_values['email']).first()
         if user and user.authenticate(req_values['password']):
             session['user_id'] = user.id
-            return jsonify(user), 201
+            user_dict = user.to_dict()
+            return user_dict, 201
         else:
             return {'error': 'Wrong email or password'}, 401
         
@@ -85,6 +78,19 @@ class Logout(Resource):
         user = User.query.filter(User.id == session['user_id']).first() and session['user_id']
 
         if user: 
+            session['user_id'] = None
+            return {}, 204
+        else:
+            return {'error': 'Unauthorized'}, 401
+
+class CheckSession(Resource):
+    def get(self):
+        user = User.query.filter(User.id == session['user_id']).first()
+        if user:
+            user_dict = user.to_dict()
+            return user_dict, 200
+        
+        return {"error": "you are not logged in"}, 404
 
 class TextToVoice(Resource):
     # used generally for synthesizing text
@@ -119,6 +125,8 @@ class TextToVoice(Resource):
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(TextToVoice, '/synthesize_speech', endpoint='text_synthesis')
 api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Logout, '/logout', endpoint='logout')
+api.add_resource(CheckSession, '/me', endpoint='me')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
