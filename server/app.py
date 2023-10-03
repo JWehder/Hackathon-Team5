@@ -1,7 +1,7 @@
 # from flask import request, session, jsonify, send_file
 # from flask_restful import Resource
 # from sqlalchemy.exc import IntegrityError
-from google.cloud import texttospeech
+# from google.cloud import texttospeech
 import os
 import google.generativeai as palm
 from dotenv import load_dotenv
@@ -9,11 +9,11 @@ from dotenv import load_dotenv
 # from config import app, db, api
 # from models import User
 
-load_dotenv()
+# load_dotenv()
 
-palm.configure(api_key=os.getenv('PALM_API_KEY'))
+palm.configure(api_key=os.getenv['PALM_API_KEY'])
 
-response = palm.generate_text(prompt="a name that starts with j")
+response = palm.generate_text(prompt="The opposite of hot is")
 print(response.result)
 
 # class Signup(Resource):
