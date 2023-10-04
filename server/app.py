@@ -115,14 +115,15 @@ class TextToVoice(Resource):
             return jsonify({"error": str(e)})
 
 class GenerateSummary(Resource):
-    def get(self):
-        request = request.get_json()
-        response = palm.generate_text(prompt=request['text'])
+    def post(self):
+        req = request.get_json()
+        response = palm.generate_text(prompt=req['text'])
+        print(response.result)
 
-        return jsonify(response), 200
+        return {'text': str(response.result)}, 200
 
 
-api.add_resource(GenerateSummary, '/generate_summary', 'generate_summary')
+api.add_resource(GenerateSummary, '/generate_summary', endpoint='generate_summary')
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(TextToVoice, '/synthesize_speech', endpoint='text_synthesis')
 api.add_resource(Login, '/login', endpoint='login')

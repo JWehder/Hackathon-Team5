@@ -2,3 +2,4 @@
 credentials.yml.enc
 /server/text_to_speech_credentials.json
 .env
+text_to_speech.json
