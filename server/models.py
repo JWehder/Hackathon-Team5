@@ -5,11 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
 import re
 
-<<<<<<< HEAD
-from app import db, bcrypt
-=======
 from config import db, bcrypt, MetaData
->>>>>>> c5ed4e5f8cb016837a48b0aea57b2948691456bf
 
 # Base = declarative_base()
 
