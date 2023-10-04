@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import axios from 'axios'
 
-const getUser = axios.get("http://localhost:5555/me")
+const getUser = () => axios.get("http://localhost:5555/me")
 
 const login = (user) => axios.post('/login', user)
 
@@ -42,6 +42,7 @@ export const useStore = create((set) => ({
     },
     signup: async (userData) => {
         try{
+            console.log(userData)
             set({ isLoading: true });
             const response = await signup(userData);
             set({ isLoading: false, user: response.data });

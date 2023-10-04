@@ -22,10 +22,11 @@ import { useStore } from '../stores/useUsersStore'
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
   const [userInfo, setUserInfo] = useState({
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    password: ''
+    password: '',
+    disability:'blind'
   })
   const createUser = useStore(state => state.signup)
 
