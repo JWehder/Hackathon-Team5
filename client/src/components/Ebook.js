@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
     Box,
     Stack,
@@ -6,7 +7,6 @@ import {
     Container,
     SimpleGrid,
     Flex,
-    useBreakpointValue,
     Icon,
     Image,
     Avatar,
@@ -15,21 +15,62 @@ import {
   } from '@chakra-ui/react';
   import { StarIcon } from '@chakra-ui/icons';
   import { BsBookmark, BsLightbulb, BsChatLeftDots, BsPuzzle } from 'react-icons/bs';
+  import Loading from './Loading';
 
 
   export default function Ebook() {
+    const [summary, setSummary] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const IMAGE = 'https://m.media-amazon.com/images/I/81lopKpiXhL._AC_UF1000,1000_QL80_.jpg'
 
+    function generateIdeas() {
+        setLoading(true)
+        fetch('http://localhost:5555/generate_summary', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: "Give me a short summary of Python Crash Course and why we should read it in paragraph string form" })
+            })
+        .then(response => response.json())
+        .then(data => {
+            setLoading(false)
+            setSummary(data.text)
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function generateSpeech() {
+        setLoading(true)
+        fetch('http://localhost:5555/synthesize_speech', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: summary, lesson_name: 'test' })
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            setLoading(false)
+            const audioUrl = URL.createObjectURL(blob)
+            const audio = new Audio(audioUrl);
+            console.log(blob, audioUrl, audio)
+            audio.play();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
     return (
-    <Flex direction={'row'}>
-      <Box position={'relative'}>
+    <Flex>
+      <Box>
         <Container
           as={SimpleGrid}
           maxW={'7xl'}
           columns={{ base: 1, md: 2 }}
-          spacing={{ base: 10, lg: 32 }}
-          py={{ base: 10, sm: 20, lg: 32 }}>
+        //   spacing={{ base: 10, lg: 32 }}
+          py={{ base: 10, sm: 20, lg: 12 }}
+          >
           <Stack spacing={{ base: 10, md: 20 }}>
           <Box
             role={'group'}
@@ -96,8 +137,10 @@ import {
             </Flex>
             <Text>200 visited</Text>
             <Text>12 Dec 2019 Published</Text>
-            <Button leftIcon={<BsLightbulb />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}>Key Ideas</Button>
-            <Button leftIcon={<BsChatLeftDots />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}>Text to Voice</Button>
+            <Button leftIcon={<BsLightbulb />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}
+                onClick={generateIdeas}>Key Ideas</Button>
+            <Button leftIcon={<BsChatLeftDots />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4} 
+                onClick={generateSpeech}>Text to Voice</Button>
             <Button leftIcon={<BsPuzzle />}borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}>Take Quiz</Button>
             </Stack>
         </Box>
@@ -118,13 +161,13 @@ import {
                     <Text>The basics of a powerful language</Text>
                     <Divider />
                     <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500
+                    {summary}
+                    {loading && <Loading />}
                     </Text>
                     </Stack>
                     <Box mt={10}>
                     <Stack spacing={4}>
                     </Stack>
-                    
                     </Box>
                 </Stack>
             </Container>

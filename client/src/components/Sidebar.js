@@ -39,6 +39,7 @@ import Courses from './Courses'
 import CompletedCourses from './CompletedCourses'
 import Community from './Community'
 import Settings from './Settings'
+import Ebook from './Ebook';
 
 
 
@@ -199,7 +200,7 @@ const SidebarWithHeader = () => {
       <MobileNav onOpen={onOpen} selectedLink={selectedLink}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
-          {selectedLink === 'Home' && <Home />}
+          {selectedLink === 'Home' && <Ebook />}
           {selectedLink === 'eBooks' && <EBooks />}
           {selectedLink === 'Courses' && <Courses />}
           {selectedLink === 'Completed Courses' && <CompletedCourses />}

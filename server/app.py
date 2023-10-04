@@ -12,6 +12,7 @@ from models import User
 from config import Flask, SQLAlchemy, db
 
 palm.configure(api_key=os.getenv('PALM_API_KEY'))
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="text_to_speech_credentials.json"
 
 class Signup(Resource):
@@ -105,10 +106,12 @@ class TextToVoice(Resource):
 
 class GenerateSummary(Resource):
     def post(self):
-        request = request.get_json()
-        response = palm.generate_text(prompt=request['text'])
+        req = request.get_json()
+        response = palm.generate_text(prompt=req['text'])
 
-        return jsonify(response), 200
+
+
+        return {'text': str(response.result)}, 200
 
 
 api.add_resource(GenerateSummary, '/generate_summary', endpoint='generate_summary')
