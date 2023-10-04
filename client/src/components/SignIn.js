@@ -1,4 +1,4 @@
-import React, { useState } from 'react' 
+import React, { useState, useEffect } from 'react' 
 import {
   Flex,
   Box,
@@ -21,6 +21,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
 import SignUp from './SignUp'
+import { useStore } from '../stores/useUsersStore'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
@@ -28,24 +29,46 @@ export default function SimpleCard() {
         email: '',
         password: ''
     })
+    const [user, setUser] = useState()
+    const createUser = useStore(state => state.login)
+    const checkUser = useStore(state => state.getUser)
+
+    useEffect(() => {
+      checkUser()
+    }, [checkUser])
+
+    useEffect(() => {
+      fetch('http://localhost:5555/me')
+      .then(response => response.json())
+      .then(data => setUser(data))
+    }
+    , [])
+
 
     function handleLogin(e) {
       e.preventDefault()
-      fetch('http://localhost:5555/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userInfo)
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        localStorage.setItem('token', data.token)
-      })
-      .catch(error => console.error('Error:', error));
+      createUser(userInfo)
       console.log(userInfo) 
     }
+
+    // function handleLogin(e) {
+    //   e.preventDefault()
+    //   fetch('http://localhost:5555/login', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(userInfo)
+    //   })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data)
+    //     setUser(data)
+    //   })
+    //   .catch(error => console.error('Error:', error));
+    // }
+
+
 
 
   return (

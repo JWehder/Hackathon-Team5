@@ -25,7 +25,7 @@ from config import Flask, SQLAlchemy, db
 
 palm.configure(api_key=os.getenv('PALM_API_KEY'))
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech_credentials.json"
 
 # print(response.result)
 
@@ -36,11 +36,11 @@ class Signup(Resource):
         try: 
             user = User(
                 email=json.get('email'),
-                linked_in=json.get('linked_in'),
+                # linked_in=json.get('linked_in'),
                 first_name=json.get('first_name'),
                 last_name=json.get('last_name'),
-                disability=json.get('disability'),
-                country=json.get('country')
+                # disability=json.get('disability'),
+                # country=json.get('country')
             )
             user.password_hash = json.get('password')
             db.session.add(user)
@@ -82,12 +82,13 @@ class Logout(Resource):
 
 class CheckSession(Resource):
     def get(self):
-        user = User.query.filter(User.id == session['user_id']).first()
-        if user:
-            user_dict = user.to_dict()
-            return user_dict, 200
+        if 'user_id' in session:
+            user = User.query.filter(User.id == session['user_id']).first()
+            if user:
+                user_dict = user.to_dict()
+                return user_dict, 200
         
-        return {"error": "you are not logged in"}, 404
+        # return {"error": "you are not logged in"}, 404
 
 class TextToVoice(Resource):
     # used generally for synthesizing text
