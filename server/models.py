@@ -2,9 +2,18 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.declarative import declarative_base
 import re
 
-from config import db, bcrypt
+from config import db, bcrypt, MetaData
+
+# Base = declarative_base()
+
+# user_courses = db.Table(
+#     'user_courses', Base.metadata,
+#     db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+#     db.Column('course_id', db.Integer, db.ForeignKey('courses.id'))
+# )
 
 class Base(db.Model, SerializerMixin):
     __abstract__ = True
@@ -49,8 +58,7 @@ class User(Base):
     last_name = db.Column(db.String, nullable=False)
     disability = db.Column(db.String, nullable=False)
     country = db.Column(db.String)
-    courses = db.relationship('Course', backref='users', cascade="all, delete-orphan")
-    lessons = db.relationship('Lesson', backref='users')
+    courses = db.relationship('Enrollee', back_populates='user', cascade="all, delete-orphan")
 
     @validates('email')
     def validate_email(self, key, address):
@@ -133,8 +141,7 @@ class Course(Base):
     description = db.Column(db.String, nullable=False)
     caption = db.Column(db.String, nullable=False)
     lessons = db.relationship('Lesson', backref='course', cascade="all, delete-orphan")
-    users = db.relationship('User', backref='courses')
-
+    users = db.relationship('Enrollee', back_populates='course')
 
     @validates('description')
     def validate_length_description(self, key, description):
@@ -153,8 +160,19 @@ class Course(Base):
         return serialized
         
 
-    def __repre__(self):
+    def __repr__(self):
         return f'Course {self.id}, caption: {self.caption}, Description: {self.description}'
+
+class Enrollee(Base):
+    __tablename__ = 'enrollees'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
+    course_id = db.Column('course_id', db.Integer, db.ForeignKey('courses.id'))
+    date_enrolled = db.Column(db.DateTime)
+
+    user = db.relationship("User", back_populates="courses")
+    course = db.relationship("Course", back_populates="users")
 
 class Lesson(Base):
     __tablename__ = 'lessons'
@@ -164,14 +182,13 @@ class Lesson(Base):
     text_content = db.Column(db.Text, nullable=False)
     name = db.Column(db.String, nullable=False, unique=True)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def to_dict(self, visited=None):
         serialized = super().to_dict(visited)
         serialized.pop('user', None)
         return serialized
 
-    def __repre__(self):
+    def __repr__(self):
         return f'Lesson {self.id}, description: {self.description}, course: {self.course_id}'
 
 
