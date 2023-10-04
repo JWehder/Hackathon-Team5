@@ -7,7 +7,6 @@ import {
     Container,
     SimpleGrid,
     Flex,
-    useBreakpointValue,
     Icon,
     Image,
     Avatar,
@@ -21,36 +20,39 @@ import {
 
   export default function Ebook() {
     const [summary, setSummary] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const IMAGE = 'https://m.media-amazon.com/images/I/81lopKpiXhL._AC_UF1000,1000_QL80_.jpg'
 
     function generateIdeas() {
+        setLoading(true)
         fetch('http://localhost:5555/generate_summary', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ text: "Give me a summary of Python Crash Course and why we should read it in paragraph string form" })
+            body: JSON.stringify({ text: "Give me a short summary of Python Crash Course and why we should read it in paragraph string form" })
             })
         .then(response => response.json())
         .then(data => {
+            setLoading(false)
             setSummary(data.text)
         })
         .catch(error => console.error('Error:', error));
     }
 
-    console.log(summary)
-
     function generateSpeech() {
+        setLoading(true)
         fetch('http://localhost:5555/synthesize_speech', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ text: 'Hello, this is a test!', lesson_name: 'test' })
+        body: JSON.stringify({ text: summary, lesson_name: 'test' })
         })
         .then(response => response.blob())
         .then(blob => {
+            setLoading(false)
             const audioUrl = URL.createObjectURL(blob)
             const audio = new Audio(audioUrl);
             console.log(blob, audioUrl, audio)
@@ -60,14 +62,15 @@ import {
     }
 
     return (
-    <Flex direction={'row'}>
-      <Box position={'relative'}>
+    <Flex>
+      <Box>
         <Container
           as={SimpleGrid}
           maxW={'7xl'}
           columns={{ base: 1, md: 2 }}
-          spacing={{ base: 10, lg: 32 }}
-          py={{ base: 10, sm: 20, lg: 32 }}>
+        //   spacing={{ base: 10, lg: 32 }}
+          py={{ base: 10, sm: 20, lg: 12 }}
+          >
           <Stack spacing={{ base: 10, md: 20 }}>
           <Box
             role={'group'}
@@ -159,13 +162,12 @@ import {
                     <Divider />
                     <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
                     {summary}
-                    {/* <Loading /> */}
+                    {loading && <Loading />}
                     </Text>
                     </Stack>
                     <Box mt={10}>
                     <Stack spacing={4}>
                     </Stack>
-                    
                     </Box>
                 </Stack>
             </Container>

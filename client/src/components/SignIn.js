@@ -47,28 +47,9 @@ export default function SimpleCard() {
       console.log(userInfo) 
     }
 
-  // function generateSpeech() {
-  //   fetch('http://localhost:5555/synthesize_speech', {
-  //   method: 'POST',
-  //   headers: {
-  //       'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify({ text: 'Hello, this is a test!', lesson_name: 'test' })
-  //   })
-  //   .then(response => response.blob())
-  //   .then(blob => {
-  //       const audioUrl = URL.createObjectURL(blob)
-  //       const audio = new Audio(audioUrl);
-  //       audio.play();
-  //   })
-  //   .catch(error => console.error('Error:', error));
-  // }
 
   return (
     <div>
-    {/* <>
-      <button onClick={generateSpeech}>Hello</button>
-    </> */}
     <Flex
       minH='100vh'
       align='center'

@@ -25,6 +25,8 @@ from config import Flask, SQLAlchemy, db
 
 palm.configure(api_key=os.getenv('PALM_API_KEY'))
 
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech.json"
+
 # print(response.result)
 
 class Signup(Resource):

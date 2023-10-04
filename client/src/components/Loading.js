@@ -1,22 +1,24 @@
+import { Box } from '@chakra-ui/layout';
 import Lottie from 'lottie-react';
 import animationData from '../lottie/Component_3.json';
 
 export default function Circle() {
-    return <div style={{
-      width: 100,
-      height: 100,
-      borderRadius: '100%',
-      backgroundColor: 'blue'
-    }}>
-        <Lottie options={{
-            loop: true,
-            autoplay: true,
-            animationData: animationData,
-            rendererSettings: {
-            preserveAspectRatio: 'xMidYMid slice'
-            }
-        }}
-        />
-    </div>;
-  };
+
+    return (
+        <Box
+            position='fixed'
+            top='0'
+            left='0'
+            width='100%'
+            height='100%'
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+            zIndex='9999'
+            backgroundColor='rgba(0,0,0,0.5)'
+            >
+            <Lottie animationData={animationData}/>
+        </Box>
+    );
+  }
 
