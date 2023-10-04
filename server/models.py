@@ -64,16 +64,19 @@ class User(Base):
     def validate_email(self, key, address):
         pattern = "([\w\.]+@[A-Za-z]+\.[A-Za-z]+)"
         if not re.match(pattern, address):
+            print("made it here")
             raise AttributeError('email addresses must be in standard format: john.doe@example.com')
 
+        return address
+
     # ensure it is a disability we support
-    @validates('disability')
-    def validate_approved_disability(self, key, disability):
-        # disability_list = [determine list of disabilities]
-        # conditonal to check if disability is in list
-        # throw error if not
-        # return disability if it is in list
-        disability_list = []
+    # @validates('disability')
+    # def validate_approved_disability(self, key, disability):
+    #     # disability_list = [determine list of disabilities]
+    #     # conditonal to check if disability is in list
+    #     # throw error if not
+    #     # return disability if it is in list
+    #     disability_list = []
 
     @validates('_password')
     def validate_password(self, key, password):

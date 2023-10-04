@@ -5,6 +5,7 @@ from google.cloud import texttospeech
 import os
 import google.generativeai as palm
 from dotenv import load_dotenv
+import traceback
 
 from config import app, db, api
 from models import User
@@ -22,12 +23,13 @@ class Signup(Resource):
         try: 
             user = User(
                 email=json.get('email'),
-                # linked_in=json.get('linked_in'),
+                linked_in=json.get('linked_in'),
                 first_name=json.get('first_name'),
                 last_name=json.get('last_name'),
-                # disability=json.get('disability'),
-                # country=json.get('country')
+                disability=json.get('disability'),
+                country=json.get('country')
             )
+
             user.password_hash = json.get('password')
             db.session.add(user)
             db.session.commit()
