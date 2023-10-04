@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     Box,
     Stack,
@@ -14,13 +14,16 @@ import {
     Divider,
   } from '@chakra-ui/react';
   import { StarIcon } from '@chakra-ui/icons';
-  import { BsBookmark, BsLightbulb, BsChatLeftDots, BsPuzzle } from 'react-icons/bs';
+  import { BsBookmark, BsLightbulb, BsChatLeftDots, BsPuzzle, BsStop } from 'react-icons/bs';
   import Loading from './Loading';
+  import ReactMarkdown from 'react-markdown';
 
 
   export default function Ebook() {
     const [summary, setSummary] = useState('')
     const [loading, setLoading] = useState(false)
+    const [isAudioPlaying, setIsPlaying] = useState(false)
+    const audioRef = useRef(null)
 
     const IMAGE = 'https://m.media-amazon.com/images/I/81lopKpiXhL._AC_UF1000,1000_QL80_.jpg'
 
@@ -43,6 +46,7 @@ import {
 
     function generateSpeech() {
         setLoading(true)
+        setIsPlaying(true)
         fetch('http://localhost:5555/synthesize_speech', {
         method: 'POST',
         headers: {
@@ -54,12 +58,25 @@ import {
         .then(blob => {
             setLoading(false)
             const audioUrl = URL.createObjectURL(blob)
-            const audio = new Audio(audioUrl);
-            console.log(blob, audioUrl, audio)
-            audio.play();
-        })
-        .catch(error => console.error('Error:', error));
+            if (audioRef.current) {
+                audioRef.current.pause()
+                audioRef.current = null
+              }
+              const audio = new Audio(audioUrl);
+              audioRef.current = audio
+              audio.play();
+            })
+            .catch((error) => console.error('Error:', error));
     }
+
+    function stopSpeech() {
+        if (audioRef.current) {
+            audioRef.current.pause() 
+            audioRef.current = null
+            setIsPlaying(false)
+        }
+    }
+
 
     return (
     <Flex>
@@ -139,8 +156,12 @@ import {
             <Text>12 Dec 2019 Published</Text>
             <Button leftIcon={<BsLightbulb />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}
                 onClick={generateIdeas}>Key Ideas</Button>
-            <Button leftIcon={<BsChatLeftDots />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4} 
-                onClick={generateSpeech}>Text to Voice</Button>
+                {isAudioPlaying ? 
+                <Button leftIcon={<BsStop />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}
+                onClick={stopSpeech}>Stop</Button> :
+                <Button leftIcon={<BsChatLeftDots />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4} 
+                onClick={generateSpeech}>Text to Voice</Button> 
+            }
             <Button leftIcon={<BsPuzzle />}borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}>Take Quiz</Button>
             </Stack>
         </Box>
@@ -158,10 +179,9 @@ import {
                         fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
                         Overview
                     </Heading>
-                    <Text>The basics of a powerful language</Text>
                     <Divider />
                     <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
-                    {summary}
+                   <ReactMarkdown>{summary}</ReactMarkdown> 
                     {loading && <Loading />}
                     </Text>
                     </Stack>
@@ -175,4 +195,3 @@ import {
     </Flex>
     );
   }
-  
