@@ -11,23 +11,9 @@ from models import User
 
 from config import Flask, SQLAlchemy, db
 
-
-# def create_app(config_name):
-#     app = Flask(__name__)
-#     app.config.from_pyfile('config.py')
-    
-#     db.init_app(app)
-
-#     from .routes import main as main_blueprint
-#     app.register_blueprint(main_blueprint)
-
-#     return app
-
 palm.configure(api_key=os.getenv('PALM_API_KEY'))
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech.json"
-
-# print(response.result)
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="text_to_speech_credentials.json"
 
 class Signup(Resource):
     def post(self):
@@ -106,6 +92,8 @@ class TextToVoice(Resource):
             
             response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
 
+            print(response.audio_content)
+
             filename = f"{lesson_name}.wav"
             with open(filename, "wb") as out:
                 out.write(response.audio_content)
@@ -120,7 +108,8 @@ class GenerateSummary(Resource):
     def post(self):
         req = request.get_json()
         response = palm.generate_text(prompt=req['text'])
-        print(response.result)
+
+
 
         return {'text': str(response.result)}, 200
 
