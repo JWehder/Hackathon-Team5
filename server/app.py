@@ -11,21 +11,8 @@ from models import User
 
 from config import Flask, SQLAlchemy, db
 
-
-# def create_app(config_name):
-#     app = Flask(__name__)
-#     app.config.from_pyfile('config.py')
-    
-#     db.init_app(app)
-
-#     from .routes import main as main_blueprint
-#     app.register_blueprint(main_blueprint)
-
-#     return app
-
 palm.configure(api_key=os.getenv('PALM_API_KEY'))
-
-# print(response.result)
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="text_to_speech_credentials.json"
 
 class Signup(Resource):
     def post(self):
@@ -104,6 +91,8 @@ class TextToVoice(Resource):
             
             response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
 
+            print(response.audio_content)
+
             filename = f"{lesson_name}.wav"
             with open(filename, "wb") as out:
                 out.write(response.audio_content)
@@ -115,14 +104,14 @@ class TextToVoice(Resource):
             return jsonify({"error": str(e)})
 
 class GenerateSummary(Resource):
-    def get(self):
+    def post(self):
         request = request.get_json()
         response = palm.generate_text(prompt=request['text'])
 
         return jsonify(response), 200
 
 
-api.add_resource(GenerateSummary, '/generate_summary', 'generate_summary')
+api.add_resource(GenerateSummary, '/generate_summary', endpoint='generate_summary')
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(TextToVoice, '/synthesize_speech', endpoint='text_synthesis')
 api.add_resource(Login, '/login', endpoint='login')
