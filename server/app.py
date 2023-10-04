@@ -1,3 +1,20 @@
+<<<<<<< HEAD
+from flask import Flask, request, jsonify, redirect, url_for
+from authlib.integrations.flask_client import OAuth
+from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
+from flask_restful import Api
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import MetaData
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
+=======
 from flask import request, session, jsonify, send_file
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
@@ -24,9 +41,32 @@ from config import Flask, SQLAlchemy, db
 #     return app
 
 
+>>>>>>> c5ed4e5f8cb016837a48b0aea57b2948691456bf
 
-# load_dotenv()
+metadata = MetaData(naming_convention={
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+})
+db = SQLAlchemy(metadata=metadata)
 
+<<<<<<< HEAD
+migrate = Migrate(app, db)
+db.init_app(app)
+
+bcrypt = Bcrypt(app)
+
+api = Api(app)
+
+oauth = OAuth(app)
+
+from routes import root_bp
+from routes import lesson_bp
+from routes import course_bp
+# from models import User, Lesson, Course
+
+app.register_blueprint(root_bp)
+app.register_blueprint(lesson_bp)
+app.register_blueprint(course_bp)
+=======
 # palm.configure(api_key=os.getenv('PALM_API_KEY'))
 
 # response = palm.generate_text(prompt="")
@@ -130,3 +170,4 @@ api.add_resource(CheckSession, '/me', endpoint='me')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+>>>>>>> c5ed4e5f8cb016837a48b0aea57b2948691456bf

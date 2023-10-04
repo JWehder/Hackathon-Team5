@@ -10,6 +10,7 @@ import Courses from './components/Courses';
 import CompletedCourses from './components/CompletedCourses';
 import Community from './components/Community';
 import Settings from './components/Settings';
+import Ebook from './components/Ebook';
 
 function App() {
  const location = useLocation();
@@ -26,6 +27,7 @@ function App() {
           <Route exact path='completedcourses' element={<CompletedCourses />} />
           <Route exact path='community' element={<Community />} />
           <Route exact path='settings' element={<Settings />} />
+          <Route exact path='ebooks/1' element={<Ebook />} />
         </Routes>
       </AnimatePresence>
     </div>

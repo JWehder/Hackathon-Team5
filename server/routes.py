@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+from datetime import datetime
+from flask import Response, make_response, jsonify, Blueprint, request
+from sqlalchemy.types import DateTime
+from sqlalchemy.sql.functions import now
+import requests
+import os
+from google.cloud import texttospeech
+from models import User
+
+
+# from app import db, bcrypt, app, request, CORS, User
+from app import app
+=======
 # from datetime import datetime
 # from flask import Response, make_response, jsonify, Blueprint, request, send_file
 # from sqlalchemy.types import DateTime
@@ -92,6 +106,7 @@
 # def authorized_google():
 #     # Handle the callback from Google after the user logs in.
 #     resp = oauth.google.authorized_response()
+>>>>>>> c5ed4e5f8cb016837a48b0aea57b2948691456bf
 
 #     if resp is None or resp.get('access_token') is None:
 #         return jsonify({"error": "Access denied: reason={} error={}".format(
@@ -99,7 +114,14 @@
 #             request.args['error_description']
 #         )}), 403
 
+<<<<<<< HEAD
+root_bp = Blueprint("root_bp", __name__)
+# CORS(root_bp)
+lesson_bp = Blueprint("lesson_bp", __name__)
+course_bp = Blueprint("course_bp", __name__)
+=======
 #     email = resp['email']
+>>>>>>> c5ed4e5f8cb016837a48b0aea57b2948691456bf
 
 #     # Check if the email exists in your database; if not, create a new user.
 #     if email not in [user['email'] for user in users]:
@@ -114,6 +136,11 @@
 
 #   CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 
+<<<<<<< HEAD
+    # Check if the user exists in your data store.
+    # user = next((User for user in User.all if user.email == email), None)
+    user = User.all.query.filter_by(email=email).first()
+=======
 #   oauth.register(
 #         name='facebook',
 #         client_id=FACEBOOK_CLIENT_ID,
@@ -125,6 +152,7 @@
 #         api_base_url='https://graph.facebook.com/',
 #         client_kwargs={'scope': 'email'},
 #     )
+>>>>>>> c5ed4e5f8cb016837a48b0aea57b2948691456bf
 
 #   return oauth.facebook.authorize(callback=url_for('authorized_facebook', _external=True))
 

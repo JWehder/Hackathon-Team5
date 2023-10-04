@@ -20,6 +20,13 @@ import Logo from '../assets/main-logo.png'
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
+  const [userInfo, setUserInfo] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: ''
+  })
+
 
   return (
     <Flex
@@ -51,19 +58,22 @@ export default function SignupCard() {
               <Box>
                 <FormControl id="firstName" isRequired>
                   <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                  <Input type="text" 
+                    value={userInfo.firstName} onChange={(e) => setUserInfo(e.target.value)} />
                 </FormControl>
               </Box>
               <Box>
                 <FormControl id="lastName" isRequired>
                   <FormLabel>Last Name</FormLabel>
-                  <Input type="text" />
+                  <Input type="text"
+                  value={userInfo.lastName} onChange={(e) => setUserInfo(e.target.value)} />
                 </FormControl>
               </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input type="email"
+              value={userInfo.email} onChange={(e) => setUserInfo(e.target.value)} />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
