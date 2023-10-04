@@ -22,6 +22,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
 import SignUp from './SignUp'
 import { useStore } from '../stores/useUsersStore'
+import { useNavigate } from 'react-router-dom'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
@@ -32,6 +33,7 @@ export default function SimpleCard() {
     const [user, setUser] = useState()
     const createUser = useStore(state => state.login)
     const checkUser = useStore(state => state.getUser)
+    const navigate = useNavigate()
 
     useEffect(() => {
       checkUser()
@@ -49,6 +51,7 @@ export default function SimpleCard() {
       e.preventDefault()
       createUser(userInfo)
       console.log(userInfo) 
+      navigate('/sidebar')
     }
 
     // function handleLogin(e) {
