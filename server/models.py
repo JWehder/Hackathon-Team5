@@ -3,7 +3,7 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from sqlalchemy.exc import IntegrityError
 
-from config import db, bcrypt
+from app import db, bcrypt
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'

@@ -1,17 +1,20 @@
 from datetime import datetime
-from flask import Response, make_response, jsonify, Blueprint
+from flask import Response, make_response, jsonify, Blueprint, request
 from sqlalchemy.types import DateTime
 from sqlalchemy.sql.functions import now
 import requests
 import os
 from google.cloud import texttospeech
+from models import User
 
 
-from config import db, bcrypt, app
+# from app import db, bcrypt, app, request, CORS, User
+from app import app
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech_credentials.json"
 
 root_bp = Blueprint("root_bp", __name__)
+# CORS(root_bp)
 lesson_bp = Blueprint("lesson_bp", __name__)
 course_bp = Blueprint("course_bp", __name__)
 
@@ -33,7 +36,8 @@ def login_with_email():
     password = data['password']
 
     # Check if the user exists in your data store.
-    user = next((user for user in users if user['username'] == username), None)
+    # user = next((User for user in User.all if user.email == email), None)
+    user = User.all.query.filter_by(email=email).first()
 
     if user is None or user['password'] != password:
         return jsonify({"error": "Invalid username or password"}), 401
