@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { AiOutlineEye,  AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
+import { useStore } from '../stores/useUsersStore'
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
@@ -26,6 +27,21 @@ export default function SignupCard() {
     email: '',
     password: ''
   })
+  const createUser = useStore(state => state.signup)
+
+  function handleSignUp(e) {
+    e.preventDefault()
+    createUser(userInfo)
+    console.log(userInfo) 
+  } 
+  
+
+  function handleChange(e){
+    setUserInfo({
+      ...userInfo,
+      [e.target.id]: e.target.value,
+    })
+  }
 
 
   return (
@@ -54,31 +70,33 @@ export default function SignupCard() {
                 </Text>
             </Stack>
           <Stack spacing={4}>
+            <form onSubmit={handleSignUp}>
             <HStack>
               <Box>
                 <FormControl id="firstName" isRequired>
                   <FormLabel>First Name</FormLabel>
                   <Input type="text" 
-                    value={userInfo.firstName} onChange={(e) => setUserInfo(e.target.value)} />
+                    value={userInfo.firstName} onChange={handleChange} />
                 </FormControl>
               </Box>
               <Box>
                 <FormControl id="lastName" isRequired>
                   <FormLabel>Last Name</FormLabel>
                   <Input type="text"
-                  value={userInfo.lastName} onChange={(e) => setUserInfo(e.target.value)} />
+                  value={userInfo.lastName} onChange={handleChange} />
                 </FormControl>
               </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
               <Input type="email"
-              value={userInfo.email} onChange={(e) => setUserInfo(e.target.value)} />
+              value={userInfo.email} onChange={handleChange} />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? 'text' : 'password'} />
+                <Input type={showPassword ? 'text' : 'password'}
+                  value={userInfo.password} onChange={handleChange} />
                 <InputRightElement width="4.5rem">
                   <Button
                     h="1.75rem" size="sm"
@@ -91,6 +109,7 @@ export default function SignupCard() {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
+                type='submit'
                 borderRadius='100'
                 loadingText="Submitting"
                 size="lg"
@@ -107,6 +126,7 @@ export default function SignupCard() {
                 Already a user? <Link href='/' color='blue.400'>Login</Link>
               </Text>
             </Stack>
+          </form>
           </Stack>
         </Box>
       </Stack>
