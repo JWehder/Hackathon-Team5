@@ -68,9 +68,6 @@ export default function SimpleCard() {
     //   .catch(error => console.error('Error:', error));
     // }
 
-
-
-
   return (
     <div>
     <Flex

@@ -109,8 +109,6 @@ class GenerateSummary(Resource):
     def post(self):
         req = request.get_json()
         response = palm.generate_text(prompt=req['text'])
-        print(response.result)
-
 
         return {'text': str(response.result)}, 200
 
