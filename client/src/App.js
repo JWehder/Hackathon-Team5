@@ -20,14 +20,14 @@ function App() {
         <Routes location={location} key={location.pathname}>
           <Route exact path='/' element={<SignIn />} />
           <Route exact path='/signup' element={<SignUp />} />
-          <Route exact path='sidebar' element={<Sidebar />} />
-          <Route exact path='home' element={<Home />} />
-          <Route exact path='ebooks' element={<Ebooks />} />
-          <Route exact path='courses' element={<Courses />} />
-          <Route exact path='completedcourses' element={<CompletedCourses />} />
-          <Route exact path='community' element={<Community />} />
-          <Route exact path='settings' element={<Settings />} />
-          <Route exact path='ebooks/1' element={<Ebook />} />
+          <Route exact path='/home' element={<Sidebar />} />
+          <Route exact path='/home/dashboard' element={<Home />} />
+          <Route exact path='/home/ebooks' element={<Ebooks />} />
+          <Route exact path='/home/courses' element={<Courses />} />
+          <Route exact path='/home/completedcourses' element={<CompletedCourses />} />
+          <Route exact path='/home/community' element={<Community />} />
+          <Route exact path='/home/settings' element={<Settings />} />
+          <Route exact path='/home/ebooks/1' element={<Ebook />} />
         </Routes>
       </AnimatePresence>
     </div>

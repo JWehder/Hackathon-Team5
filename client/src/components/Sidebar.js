@@ -200,8 +200,8 @@ const SidebarWithHeader = () => {
       <MobileNav onOpen={onOpen} selectedLink={selectedLink}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
-          {selectedLink === 'Home' && <Ebook />}
-          {selectedLink === 'eBooks' && <EBooks />}
+          {selectedLink === 'Home' && <Home />}
+          {selectedLink === 'eBooks' && <Ebook />}
           {selectedLink === 'Courses' && <Courses />}
           {selectedLink === 'Completed Courses' && <CompletedCourses />}
           {selectedLink === 'Community' && <Community />}

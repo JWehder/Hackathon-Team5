@@ -85,7 +85,7 @@ import {
           as={SimpleGrid}
           maxW={'7xl'}
           columns={{ base: 1, md: 2 }}
-        //   spacing={{ base: 10, lg: 32 }}
+          spacing={{ base: 10, lg: 12 }}
           py={{ base: 10, sm: 20, lg: 12 }}
           >
           <Stack spacing={{ base: 10, md: 20 }}>
@@ -169,8 +169,9 @@ import {
                 <Stack
                     bg={'white'}
                     p={{ base: 4, sm: 6, md: 8 }}
-                    spacing={{ base: 8 }}
-                    maxW={'md'}
+                    // spacing={{ base: 8 }}
+                    maxW={'lg'}
+                    spacing={{ base: 10, lg: 12 }}
                     >
                     <Stack spacing={4}>
                     <Heading
@@ -181,6 +182,7 @@ import {
                     </Heading>
                     <Divider />
                     <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+                        {summary === '' ? 'Click on Key Ideas to generate a summary' : ''}
                    <ReactMarkdown>{summary}</ReactMarkdown> 
                     {loading && <Loading />}
                     </Text>

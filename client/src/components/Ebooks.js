@@ -4,9 +4,7 @@ import wave from '../lottie/Component_3.json'
 
 const Ebooks = () => {
   return (
-    <div>Ebooks
-      <Lottie loop={true} animationData={wave} />
-    </div>
+    <div>Ebooks</div>
   )
 }
 
