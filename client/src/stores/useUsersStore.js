@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 import axios from 'axios'
 
-const getUser = () => axios.get("http://localhost:5555/me")
+const getUser = () => axios.get('http://localhost:5555/me')
 
-const login = (user) => axios.post('/login', user)
+const login = (user) => axios.post('http://localhost:5555/login', user)
 
-const logout = (user) =>  axios.delete('/logout')
+const logout = (user) =>  axios.delete('http://localhost:5555/logout', user)
 
 const signup = (userData) => axios.post('http://localhost:5555/signup', userData)
 

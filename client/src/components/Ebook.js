@@ -17,6 +17,7 @@ import {
   import { BsBookmark, BsLightbulb, BsChatLeftDots, BsPuzzle, BsStop } from 'react-icons/bs';
   import Loading from './Loading';
   import ReactMarkdown from 'react-markdown';
+  import { useStore } from '../stores/useUsersStore';
 
 
   export default function Ebook() {
@@ -24,6 +25,9 @@ import {
     const [loading, setLoading] = useState(false)
     const [isAudioPlaying, setIsPlaying] = useState(false)
     const audioRef = useRef(null)
+    const user = useStore(state => state.user)
+    
+    console.log(user)
 
     const IMAGE = 'https://m.media-amazon.com/images/I/81lopKpiXhL._AC_UF1000,1000_QL80_.jpg'
 
@@ -77,6 +81,23 @@ import {
         }
     }
 
+    function generateQuiz() {
+        setLoading(true)
+        fetch('http://localhost:5555/generate_summary', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: "Give me three multiple choice questions based off the book Python Crash Course in string form" })
+            })
+        .then(response => response.json())
+        .then(data => {
+            setLoading(false)
+            setSummary(data.text)
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
 
     return (
     <Flex>
@@ -85,7 +106,7 @@ import {
           as={SimpleGrid}
           maxW={'7xl'}
           columns={{ base: 1, md: 2 }}
-        //   spacing={{ base: 10, lg: 32 }}
+          spacing={{ base: 10, lg: 12 }}
           py={{ base: 10, sm: 20, lg: 12 }}
           >
           <Stack spacing={{ base: 10, md: 20 }}>
@@ -141,7 +162,7 @@ import {
                 <Text fontWeight={200} fontSize={'sm'}>
                 A Hands On, Project Based Introduction to Programming
                 </Text>
-                <Icon as={BsBookmark} color={'gray.500'} size={'xs'} />
+                <Icon as={BsBookmark} color={'gray.500'} size={10} />
             </Stack>
             <Flex alignItems='center'>
                 <Avatar name='Eric Matthes' align={'flex-start'} size='xs'/>
@@ -162,15 +183,17 @@ import {
                 <Button leftIcon={<BsChatLeftDots />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4} 
                 onClick={generateSpeech}>Text to Voice</Button> 
             }
-            <Button leftIcon={<BsPuzzle />}borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}>Take Quiz</Button>
+            <Button leftIcon={<BsPuzzle />} borderRadius={100} bg={'#2F3CED'} color={'white'} mb={4}
+                onClick={generateQuiz}>Take Quiz</Button>
             </Stack>
         </Box>
             </Stack>
                 <Stack
                     bg={'white'}
                     p={{ base: 4, sm: 6, md: 8 }}
-                    spacing={{ base: 8 }}
-                    maxW={'md'}
+                    // spacing={{ base: 8 }}
+                    maxW={'lg'}
+                    spacing={{ base: 10, lg: 12 }}
                     >
                     <Stack spacing={4}>
                     <Heading
@@ -181,6 +204,7 @@ import {
                     </Heading>
                     <Divider />
                     <Text color={'gray.500'} fontSize={{ base: 'sm', sm: 'md' }}>
+                        {summary === '' ? 'Click on Key Ideas to generate a summary' : ''}
                    <ReactMarkdown>{summary}</ReactMarkdown> 
                     {loading && <Loading />}
                     </Text>
