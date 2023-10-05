@@ -51,7 +51,7 @@ export default function Dashboard() {
                 </FormControl>
                 <Link
                   textAlign='right'
-                  style={{ marginRight: 100, color: 'blue' }}
+                  style={{ marginRight: 200, color: 'blue' }}
                 >
                   Browse all courses
                 </Link>
@@ -80,7 +80,7 @@ export default function Dashboard() {
                   <Link
                     textAlign='right'
                     fontSize={'1xl'}
-                    style={{ marginLeft: 600, color: 'blue' }}
+                    style={{ marginLeft: 800, color: 'blue' }}
                   >
                     View All
                   </Link>
@@ -96,38 +96,112 @@ export default function Dashboard() {
           >
             <SimpleGrid
               spacing={3}
-              templateColumns='repeat(auto-fill, minmax(250px, 1fr))'
+              templateColumns='repeat(auto-fill, minmax(255px, 1fr))'
             >
-              <Card maxH={{ base: '100%', sm: '200px' }} align='left'>
-                <CardHeader>
-                  <Button>Web Design</Button>
-                </CardHeader>
+              <Card
+                style={{
+                  overflowX: 'hidden',
+                  overflow: 'hidden',
+                }}
+                maxH={{ base: '100%', sm: '200px' }}
+                align='left'
+              >
+                <Button
+                  fontSize='15px'
+                  marginTop='18px'
+                  marginLeft='20px'
+                  fontWeight='normal'
+                  width='110px'
+                  size='sm'
+                  color='red'
+                  variant='outline'
+                  backgroundColor='#FFE5E7'
+                >
+                  Web Design
+                </Button>
+                <Heading
+                  py='2'
+                  style={{ textAlign: 'left', marginLeft: 20, marginTop: 10 }}
+                  size='sm'
+                  fontSize='12px'
+                >
+                  Learning web design with Figma
+                </Heading>
                 <CardBody>
-                  <Text>
-                    View a summary of all your customers over the last month.
+                  <Text style={{ textAlign: 'left', fontWeight: 300 }} py='2'>
+                    Master Figma from the essentials to design, and building
+                    your portfolio with Webflow ...
+                  </Text>
+                </CardBody>
+              </Card>
+              <Card
+                style={{
+                  overflowX: 'hidden',
+                  overflow: 'hidden',
+                }}
+                maxH={{ base: '100%', sm: '200px' }}
+                align='left'
+              >
+                <Button
+                  fontSize='15px'
+                  marginTop='18px'
+                  marginLeft='20px'
+                  fontWeight='normal'
+                  width='180px'
+                  size='sm'
+                  color='orange'
+                  variant='outline'
+                  backgroundColor='#FFF5E7'
+                >
+                  Software Engineering
+                </Button>
+                <Heading
+                  py='2'
+                  style={{ textAlign: 'left', marginLeft: 20, marginTop: 10 }}
+                  size='sm'
+                  fontSize='12px'
+                >
+                  Understand the basic of software and programming with the
+                  expert ...
+                </Heading>
+                <CardBody>
+                  <Text
+                    style={{ textAlign: 'left', fontWeight: 300, marginTop: 1 }}
+                    py='2'
+                  >
+                    Start learning software and programming to unlock your
+                    potential as a future engineer...
                   </Text>
                 </CardBody>
               </Card>
               <Card maxH={{ base: '100%', sm: '200px' }} align='left'>
-                <CardHeader>
-                  <Button>Software Engineering</Button>
-                </CardHeader>
+                <Button
+                  fontSize='15px'
+                  marginTop='18px'
+                  marginLeft='20px'
+                  fontWeight='normal'
+                  width='180px'
+                  size='sm'
+                  color='blue'
+                  border='0px'
+                  variant='outline'
+                  backgroundColor='#E6F7FF'
+                  colorScheme='blue'
+                >
+                  Digital Marketing
+                </Button>
+                <Heading
+                  py='2'
+                  style={{ textAlign: 'left', marginLeft: 20, marginTop: 10 }}
+                  size='sm'
+                  fontSize='12px'
+                >
+                  Brand Strategy in Digital Marketing
+                </Heading>
                 <CardBody>
-                  <Text>
-                    View a summary of all your customers over the last month.
-                  </Text>
-                </CardBody>
-              </Card>
-              <Card maxH={{ base: '100%', sm: '200px' }} align='left'>
-                <Button colorScheme='yellow'>Digital Marketing</Button>
-                <Heading size='sm'>The perfect latte</Heading>
-                <CardBody>
-                  <Text py='2'>
-                    Caffè latte is a coffee beverage of Italian origin made with
-                    espresso and steamed milk.
-                  </Text>
-                  <Text>
-                    View a summary of all your customers over the last month.
+                  <Text style={{ textAlign: 'left', fontWeight: 300 }} py='2'>
+                    Master the comprehensive understanding about Brand Strategy
+                    in digital marketing from expert ...
                   </Text>
                 </CardBody>
               </Card>
