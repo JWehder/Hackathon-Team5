@@ -35,6 +35,7 @@ import { TfiBookmarkAlt } from 'react-icons/tfi'
 import Logo from '../assets/main-logo.png'
 import Home from './Home'
 import EBooks from './Ebooks'
+import Dashboard from './HomeTest'
 import Courses from './Courses'
 import CompletedCourses from './CompletedCourses'
 import Community from './Community'
@@ -200,8 +201,8 @@ const SidebarWithHeader = () => {
       <MobileNav onOpen={onOpen} selectedLink={selectedLink}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
-          {selectedLink === 'Home' && <Home />}
-          {selectedLink === 'eBooks' && <Ebook />}
+          {selectedLink === 'Home' && <Ebook />}
+          {selectedLink === 'eBooks' && <Dashboard />}
           {selectedLink === 'Courses' && <Courses />}
           {selectedLink === 'Completed Courses' && <CompletedCourses />}
           {selectedLink === 'Community' && <Community />}
