@@ -95,8 +95,6 @@ class TextToVoice(Resource):
             
             response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
 
-            print(response.audio_content)
-
             filename = f"{lesson_name}.wav"
             with open(filename, "wb") as out:
                 out.write(response.audio_content)
