@@ -51,25 +51,8 @@ export default function SimpleCard() {
       e.preventDefault()
       createUser(userInfo)
       console.log(userInfo) 
-      navigate('/sidebar')
+      navigate('/home')
     }
-
-    // function handleLogin(e) {
-    //   e.preventDefault()
-    //   fetch('http://localhost:5555/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(userInfo)
-    //   })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data)
-    //     setUser(data)
-    //   })
-    //   .catch(error => console.error('Error:', error));
-    // }
 
   return (
     <div>

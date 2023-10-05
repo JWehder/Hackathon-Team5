@@ -17,7 +17,7 @@ export default function Circle() {
             zIndex='9999'
             backgroundColor='rgba(0,0,0,0.5)'
             >
-            <Lottie animationData={animationData}/>
+            <Lottie animationData={animationData} speed={2} loop={true}/>
         </Box>
     );
   }
