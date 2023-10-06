@@ -13,8 +13,6 @@ import {
   Drawer,
   DrawerContent,
   useDisclosure,
-  BoxProps,
-  FlexProps,
   Menu,
   MenuButton,
   MenuDivider,
@@ -40,7 +38,8 @@ import Courses from './Courses'
 import CompletedCourses from './CompletedCourses'
 import Community from './Community'
 import Settings from './Settings'
-import Ebook from './Ebook';
+import Ebook from './Ebook'
+import { useStore } from '../stores/useUsersStore'
 
 
 
@@ -117,6 +116,15 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
 }
 
 const MobileNav = ({ onOpen, selectedLink, ...rest }) => {
+  const logout = useStore((state) => state.logout)
+  const user = useStore((state) => state.user)
+
+  console.log(user)
+
+  function handleLogout() {
+    logout()
+  }
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -201,8 +209,8 @@ const SidebarWithHeader = () => {
       <MobileNav onOpen={onOpen} selectedLink={selectedLink}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
-          {selectedLink === 'Home' && <Ebook />}
-          {selectedLink === 'eBooks' && <Dashboard />}
+          {selectedLink === 'Home' && <Dashboard />}
+          {selectedLink === 'eBooks' && <Ebook />}
           {selectedLink === 'Courses' && <Courses />}
           {selectedLink === 'Completed Courses' && <CompletedCourses />}
           {selectedLink === 'Community' && <Community />}
