@@ -103,17 +103,16 @@ import {
     <Flex>
       <Box>
         <Container
-          as={SimpleGrid}
-          maxW={'7xl'}
-          columns={{ base: 1, md: 2 }}
-          spacing={{ base: 10, lg: 12 }}
-          py={{ base: 10, sm: 20, lg: 12 }}
+          as={Flex}
+          maxW={'100%'}
+          columns={{ base: 2, md: 3 }}
+          py={{ base: 20, sm: 20, lg: 12 }}
           >
           <Stack spacing={{ base: 10, md: 20 }}>
           <Box
             role={'group'}
             p={6}
-            maxW={'275px'}
+            maxW={'300px'}
             w={'full'}
             bg={'gray.200'}
             boxShadow={'2xl'}
@@ -122,7 +121,6 @@ import {
             zIndex={1}>
             <Box
             rounded={'lg'}
-            mt={-12}
             pos={'relative'}
             height={'230px'}
             _after={{
@@ -144,11 +142,10 @@ import {
             }}>
             <Image
                 rounded={'lg'}
-                height={230}
+                height={250}
                 width={282}
-                objectFit='inherit'
+                objectFit='scale-down'
                 src={IMAGE}
-                alt="#"
             />
             </Box>
             <Stack pt={10} >
@@ -192,7 +189,7 @@ import {
                     bg={'white'}
                     p={{ base: 4, sm: 6, md: 8 }}
                     // spacing={{ base: 8 }}
-                    maxW={'lg'}
+                    maxW={{base: '100%', sm: '100%', md: '100%'}}
                     spacing={{ base: 10, lg: 12 }}
                     >
                     <Stack spacing={4}>

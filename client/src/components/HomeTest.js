@@ -22,6 +22,8 @@ import {
   Link,
   Input,
   FormControl,
+  useColorModeValue,
+  Spacer,
 } from '@chakra-ui/react';
 
 export default function Dashboard() {
@@ -50,8 +52,9 @@ export default function Dashboard() {
                   />
                 </FormControl>
                 <Link
-                  textAlign='right'
-                  style={{ marginRight: 200, color: 'blue' }}
+                  textAlign='center'
+                  color={'blue'}
+                  fontWeight={600}
                 >
                   Browse all courses
                 </Link>
@@ -65,27 +68,28 @@ export default function Dashboard() {
             maxW='container.lg'
           >
             <Stack spacing='4'>
-              <HStack>
-                <Box>
-                  <Heading
-                    textAlign='left'
-                    fontSize={'1xl'}
-                    fontFamily={'body'}
-                    fontWeight={600}
-                  >
-                    Current Courses
-                  </Heading>
-                </Box>
-                <Box>
-                  <Link
-                    textAlign='right'
-                    fontSize={'1xl'}
-                    style={{ marginLeft: 800, color: 'blue' }}
-                  >
-                    View All
-                  </Link>
-                </Box>
-              </HStack>
+                <Flex>
+                  <Box>
+                    <Heading
+                      textAlign='left'
+                      fontSize={'1xl'}
+                      fontFamily={'body'}
+                      fontWeight={600}
+                    >
+                      Current Courses
+                    </Heading>
+                  </Box>
+                  <Spacer />
+                  <Box>
+                    <Link
+                      fontSize={'1xl'}
+                      color={'blue'}
+                      fontWeight={600}
+                    >
+                      View All
+                    </Link>
+                  </Box>
+                </Flex>
             </Stack>
           </Container>
           <Container
@@ -110,12 +114,15 @@ export default function Dashboard() {
                   fontSize='15px'
                   marginTop='18px'
                   marginLeft='20px'
-                  fontWeight='normal'
+                  fontWeight='600'
                   width='110px'
                   size='sm'
                   color='red'
+                  bg={useColorModeValue('red.50', 'red.900')}
                   variant='outline'
                   backgroundColor='#FFE5E7'
+                  p={2}
+                  px={3}
                 >
                   Web Design
                 </Button>
@@ -146,12 +153,15 @@ export default function Dashboard() {
                   fontSize='15px'
                   marginTop='18px'
                   marginLeft='20px'
-                  fontWeight='normal'
+                  fontWeight='600'
                   width='180px'
                   size='sm'
                   color='orange'
                   variant='outline'
                   backgroundColor='#FFF5E7'
+                  bg={useColorModeValue('orange.50', 'orange.900')}
+                  p={2}
+                  px={3}
                 >
                   Software Engineering
                 </Button>
@@ -179,14 +189,17 @@ export default function Dashboard() {
                   fontSize='15px'
                   marginTop='18px'
                   marginLeft='20px'
-                  fontWeight='normal'
+                  fontWeight='600'
                   width='180px'
                   size='sm'
                   color='blue'
                   border='0px'
                   variant='outline'
                   backgroundColor='#E6F7FF'
+                  bg={useColorModeValue('blue.50', 'blue.900')}
                   colorScheme='blue'
+                  p={2}
+                  px={3}
                 >
                   Digital Marketing
                 </Button>
