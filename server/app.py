@@ -1,4 +1,4 @@
-from flask import request, session, jsonify, send_file
+from flask import request, session, jsonify, send_file, make_response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from google.cloud import texttospeech
@@ -6,6 +6,7 @@ import os
 import google.generativeai as palm
 from dotenv import load_dotenv
 import traceback
+from functools import wraps
 
 from config import app, db, api
 from models import User
@@ -16,9 +17,31 @@ palm.configure(api_key=os.getenv('PALM_API_KEY'))
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="text_to_speech_credentials.json"
 
+# HTTP Constants
+HTTP_SUCCESS = 200
+HTTP_CREATED = 201
+HTTP_NO_CONTENT = 204
+HTTP_UNAUTHORIZED = 401
+HTTP_NOT_FOUND = 404
+HTTP_BAD_REQUEST = 400
+HTTP_CONFLICT = 409
+HTTP_SERVER_ERROR = 500
+
+def authorized(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'user_id' not in session:
+            return make_response(jsonify({'error': 'Not authorized'}), HTTP_UNAUTHORIZED)
+        return func(*args, **kwargs)
+    return wrapper
+
+
 class Signup(Resource):
     def post(self):
         json = request.get_json()
+
+        if not json['email'] or not json['linked_in'] or not json['first_name'] or not json['last_name']:
+            return make_response(jsonify({'error': 'First name, last name, email, and password are required fields'}), HTTP_BAD_REQUEST)
 
         try: 
             user = User(
@@ -36,9 +59,9 @@ class Signup(Resource):
 
             session['user_id'] = user.id
             user_dict = user.to_dict()
-            return user_dict, 201
+            return user_dict, HTTP_CREATED
         except IntegrityError:
-            return {'error': 'Not Authorized'}, 422
+            return {'error': 'Not Authorized'}, HTTP_UNAUTHORIZED
 
 class Login(Resource):
     def post(self):
@@ -59,6 +82,7 @@ class Login(Resource):
             return {'error': 'Wrong email or password'}, 401
         
 class Logout(Resource):
+    @authorized
     def delete(self):
         user = User.query.filter(User.id == session['user_id']).first() and session['user_id']
 
@@ -83,6 +107,7 @@ class TextToVoice(Resource):
     # in a typical application, we would input this into each lesson
     # However, we're attempting to maintain our free credits with GCP
     # so this will suffice
+    @authorized
     def post(self):
         text = request.get_json()['text']
         lesson_name = request.get_json()['lesson_name']
@@ -106,6 +131,7 @@ class TextToVoice(Resource):
             return jsonify({"error": str(e)})
 
 class GenerateSummary(Resource):
+    @authorized
     def post(self):
         req = request.get_json()
         response = palm.generate_text(prompt=req['text'])
