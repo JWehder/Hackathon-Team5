@@ -1,21 +1,16 @@
 from flask import request, session, jsonify, send_file, make_response
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from google.cloud import texttospeech
-import os
-import google.generativeai as palm
-from dotenv import load_dotenv
 import traceback
 from functools import wraps
-
 from config import app, db, api
 from models import User
-
 from config import Flask, SQLAlchemy, db
+from logic import convert_text_to_voice
+import os
+import google.generativeai as palm
 
 palm.configure(api_key=os.getenv('PALM_API_KEY'))
-
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="text_to_speech_credentials.json"
 
 # HTTP Constants
 HTTP_SUCCESS = 200
@@ -26,6 +21,7 @@ HTTP_NOT_FOUND = 404
 HTTP_BAD_REQUEST = 400
 HTTP_CONFLICT = 409
 HTTP_SERVER_ERROR = 500
+HTTP_UNPROCESSABLE_ENTITY = 422
 
 def authorized(func):
     @wraps(func)
@@ -61,7 +57,16 @@ class Signup(Resource):
             user_dict = user.to_dict()
             return user_dict, HTTP_CREATED
         except IntegrityError:
-            return {'error': 'Not Authorized'}, HTTP_UNAUTHORIZED
+                # Handle IntegrityError...
+                return {'error': 'A user with these details already exists'}, HTTP_CONFLICT
+
+        except ValueError as ve:
+                # Handle ValueError which might be raised during inappropriate data assignment...
+                return {'error': f'Value error: {str(ve)}'}, HTTP_BAD_REQUEST
+
+        except Exception as e:
+                # Handle any other exceptions...
+                return {'error': 'An unexpected error occurred'}, HTTP_SERVER_ERROR
 
 class Login(Resource):
     def post(self):
@@ -71,13 +76,13 @@ class Login(Resource):
         # if not return error, if so return user and set session
         req_values = request.get_json()
         if not req_values or 'email' not in req_values or 'password' not in req_values:
-            return jsonify({"error": "Invalid request"}), 400
+            return jsonify({"error": "Invalid request"}), HTTP_BAD_REQUEST
 
         user = User.query.filter_by(email=req_values['email']).first()
         if user and user.authenticate(req_values['password']):
             session['user_id'] = user.id
             user_dict = user.to_dict()
-            return user_dict, 201
+            return user_dict, HTTP_CREATED
         else:
             return {'error': 'Wrong email or password'}, 401
         
@@ -88,9 +93,9 @@ class Logout(Resource):
 
         if user: 
             session['user_id'] = None
-            return {}, 204
+            return {}, HTTP_NO_CONTENT
         else:
-            return {'error': 'Unauthorized'}, 401
+            return {'error': 'Unauthorized'}, HTTP_UNAUTHORIZED
 
 class CheckSession(Resource):
     def get(self):
@@ -98,7 +103,7 @@ class CheckSession(Resource):
             user = User.query.filter(User.id == session['user_id']).first()
             if user:
                 user_dict = user.to_dict()
-                return user_dict, 200
+                return user_dict, HTTP_SUCCESS
         
         # return {"error": "you are not logged in"}, 404
 
@@ -113,19 +118,7 @@ class TextToVoice(Resource):
         lesson_name = request.get_json()['lesson_name']
 
         try:
-            client = texttospeech.TextToSpeechClient()
-            synthesis_input = texttospeech.SynthesisInput(text=text)
-            voice = texttospeech.VoiceSelectionParams(language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL)
-            audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.LINEAR16)
-            
-            response = client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
-
-            filename = f"{lesson_name}.wav"
-            with open(filename, "wb") as out:
-                out.write(response.audio_content)
-                print(f'printing to file: {filename}')
-
-            return send_file(filename, as_attachment=True, mimetype='audio/wav')
+            return convert_text_to_voice(text, lesson_name)
 
         except Exception as e:
             return jsonify({"error": str(e)})
@@ -136,7 +129,7 @@ class GenerateSummary(Resource):
         req = request.get_json()
         response = palm.generate_text(prompt=req['text'])
 
-        return {'text': str(response.result)}, 200
+        return {'text': str(response.result)}, HTTP_SUCCESS
 
 
 api.add_resource(GenerateSummary, '/generate_summary', endpoint='generate_summary')
