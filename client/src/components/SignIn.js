@@ -40,11 +40,17 @@ export default function SimpleCard() {
     const responseFacebook = (response) => {
       console.log(response);
       setUser(response)
+      if (response.accessToken) {
+        navigate('/home')
+      }
     } 
 
     const responseGoogle = (response) => {
       console.log(response);
       setUser(response)
+      if (response.accessToken) {
+        navigate('/home')
+      }
     }
 
     console.log(user)
