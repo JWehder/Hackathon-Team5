@@ -23,6 +23,8 @@ import Logo from '../assets/main-logo.png'
 import SignUp from './SignUp'
 import { useStore } from '../stores/useUsersStore'
 import { useNavigate } from 'react-router-dom'
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
+import GoogleLogin from 'react-google-login'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
@@ -34,6 +36,18 @@ export default function SimpleCard() {
     const createUser = useStore(state => state.login)
     const checkUser = useStore(state => state.getUser)
     const navigate = useNavigate()
+
+    const responseFacebook = (response) => {
+      console.log(response);
+      setUser(response)
+    } 
+
+    const responseGoogle = (response) => {
+      console.log(response);
+      setUser(response)
+    }
+
+    console.log(user)
 
     useEffect(() => {
       checkUser()
@@ -79,17 +93,37 @@ export default function SimpleCard() {
                 <Text fontSize='md' color={'gray.600'}>
                     Please sign in first to access all features
                 </Text>
-                <Button borderRadius='100'
+                <GoogleLogin
+                  clientId="288451376498-ikvefe1s9v1529ep72nnnr99335kog9t.apps.googleusercontent.com"
+                  render={renderProps => (
+                    <Button borderRadius='100'
                     width='100%'
                     bg='white'
                     variant='outline'
                     marginBottom='2'
                     colorScheme='google'
+                    onClick={renderProps.onClick}
                     leftIcon={<FcGoogle />}>Continue with Google</Button>
-                <Button borderRadius='100'
+                  )}
+                  buttonText="Login"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  cookiePolicy={'single_host_origin'}
+                />
+                <FacebookLogin
+                  appId='1425952207982191'
+                  autoLoad={false}
+                  fields='name,email,picture'
+                  // onClick={componentClicked}
+                  render={renderProps => (
+                    <Button borderRadius='100'
                     width='100%'
                     colorScheme='facebook'
-                    leftIcon={<FaFacebook />}>Continue with Facebook</Button>
+                    leftIcon={<FaFacebook />}
+                    onClick={renderProps.onClick}
+                    >Continue with Facebook</Button>
+                  )}
+                  callback={responseFacebook} />
             </Stack>
             <Flex align="center">
                 <Divider />
