@@ -31,6 +31,29 @@ def authorized(func):
         return func(*args, **kwargs)
     return wrapper
 
+class ForgotPassword(Resource):
+    def post(self):
+        json = request.get_json()
+
+        user = User.query.filter_by(email=json['email']).first()
+
+        if not user:
+            return jsonify({'error': 'the email you entered was not recognized'}), HTTP_UNAUTHORIZED
+
+        session['user_id'] = user.id
+        return jsonify({'success_message': 'Sent an email'}), HTTP_SUCCESS
+
+class ResetPassword(Resource):
+    def post(self):
+        json = request.get_json()
+
+        user = User.query.filter_by(id=session['user_id']).first()
+
+        if not user.code == json['code']:
+            return jsonify({'error': 'code is incorrect'}), HTTP_UNAUTHORIZED
+
+        return jsonify({'success_message': 'code is correct!'}), HTTP_SUCCESS
+
 
 class Signup(Resource):
     def post(self):
@@ -112,7 +135,7 @@ class TextToVoice(Resource):
     # in a typical application, we would input this into each lesson
     # However, we're attempting to maintain our free credits with GCP
     # so this will suffice
-    @authorized
+    # @authorized
     def post(self):
         text = request.get_json()['text']
         lesson_name = request.get_json()['lesson_name']
@@ -124,7 +147,7 @@ class TextToVoice(Resource):
             return jsonify({"error": str(e)})
 
 class GenerateSummary(Resource):
-    @authorized
+    # @authorized
     def post(self):
         req = request.get_json()
         response = palm.generate_text(prompt=req['text'])
@@ -138,6 +161,8 @@ api.add_resource(TextToVoice, '/synthesize_speech', endpoint='text_synthesis')
 api.add_resource(Login, '/login', endpoint='login')
 api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(CheckSession, '/me', endpoint='me')
+api.add_resource(ForgotPassword, '/forgot_password', endpoint='forgot_password')
+api.add_resource(ResetPassword, '/reset_password', endpoint='reset_password')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
