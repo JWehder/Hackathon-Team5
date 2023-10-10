@@ -11,6 +11,7 @@ import CompletedCourses from './components/CompletedCourses';
 import Community from './components/Community';
 import Settings from './components/Settings';
 import Ebook from './components/Ebook';
+import Dashboard from './components/Home';
 
 function App() {
  const location = useLocation();
@@ -18,6 +19,7 @@ function App() {
     <div className="App">
       <AnimatePresence >
         <Routes location={location} key={location.pathname}>
+          <Route exact path='/test' element={<Dashboard />} />
           <Route exact path='/' element={<SignIn />} />
           <Route exact path='/signup' element={<SignUp />} />
           <Route exact path='/home' element={<Sidebar />} />
