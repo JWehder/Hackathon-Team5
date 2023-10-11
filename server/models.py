@@ -4,6 +4,7 @@ from sqlalchemy.orm import validates
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
 import re
+import secrets
 
 from config import db, bcrypt, MetaData
 
@@ -109,6 +110,9 @@ class User(Base):
     def authenticate(self, password):
         return bcrypt.check_password_hash(
             self._password, password.encode('utf-8'))
+
+    def generate_code(self):
+        return secrets.token_hex(8)
         
     def to_dict(self, visited=None):
         serialized = super().to_dict(visited, exclude={'courses', 'lessons'})

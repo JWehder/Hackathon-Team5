@@ -40,6 +40,10 @@ class ForgotPassword(Resource):
         if not user:
             return jsonify({'error': 'the email you entered was not recognized'}), HTTP_UNAUTHORIZED
 
+        user.code = user.generate_code
+        db.session.add(user)
+        db.session.commit()
+
         session['user_id'] = user.id
         return jsonify({'success_message': 'Sent an email'}), HTTP_SUCCESS
 
