@@ -24,7 +24,7 @@ import SignUp from './SignUp'
 import { useStore } from '../stores/useUsersStore'
 import { useNavigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import GoogleLogin from 'react-google-login'
+import { useGoogleLogin } from '@react-oauth/google'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
@@ -45,13 +45,11 @@ export default function SimpleCard() {
       }
     } 
 
-    const responseGoogle = (response) => {
-      console.log(response);
-      setUser(response)
-      if (response.accessToken) {
-        navigate('/home')
-      }
-    }
+    const googleLogin = useGoogleLogin({
+      onSuccess: tokenResponse =>  setUser(tokenResponse),
+      onError: error => console.log("error", error),
+      redirect_uri: 'http://localhost:3000/home',
+    })
 
     console.log(user)
 
@@ -99,23 +97,23 @@ export default function SimpleCard() {
                 <Text fontSize='md' color={'gray.600'}>
                     Please sign in first to access all features
                 </Text>
-                <GoogleLogin
+                {/* <GoogleLogin
                   clientId="288451376498-ikvefe1s9v1529ep72nnnr99335kog9t.apps.googleusercontent.com"
-                  render={renderProps => (
+                  render={renderProps => ( */}
                     <Button borderRadius='100'
                     width='100%'
                     bg='white'
                     variant='outline'
                     marginBottom='2'
                     colorScheme='google'
-                    onClick={renderProps.onClick}
+                    onClick={() => googleLogin()}
                     leftIcon={<FcGoogle />}>Continue with Google</Button>
-                  )}
+                  {/* )}
                   buttonText="Login"
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
                   cookiePolicy={'single_host_origin'}
-                />
+                /> */}
                 <FacebookLogin
                   appId='1425952207982191'
                   autoLoad={false}
