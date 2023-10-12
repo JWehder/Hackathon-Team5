@@ -113,6 +113,21 @@ class User(Base):
 
     def generate_code(self):
         return secrets.token_hex(8)
+
+    def generate_forgot_password_message(self):
+            subject = "Password Reset Requested"
+            body = f"""
+                <html>
+                    <body>
+                        <h1>Hi {self.first_name} {self.last_name},</h1>
+                        <p>We received a request to reset your password. If you didn't make the request, please ignore this email.</p>
+                        <p>Please reset your password with the following code: {self.code}</p>
+                        <p>Thank you,</p>
+                        <p>Learn Link</p>
+                    </body>
+                </html>
+                """
+            return subject, body, self.email
         
     def to_dict(self, visited=None):
         serialized = super().to_dict(visited, exclude={'courses', 'lessons'})

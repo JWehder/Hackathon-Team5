@@ -6,7 +6,7 @@ from functools import wraps
 from config import app, db, api
 from models import User
 from config import Flask, SQLAlchemy, db
-from logic import convert_text_to_voice
+from logic import convert_text_to_voice, send_email
 import os
 import google.generativeai as palm
 
@@ -43,6 +43,9 @@ class ForgotPassword(Resource):
         user.code = user.generate_code
         db.session.add(user)
         db.session.commit()
+
+        subject, body, to_address = user.generate_forgot_password_email
+        send_email(to_address, subject, body)
 
         session['user_id'] = user.id
         return jsonify({'success_message': 'Sent an email'}), HTTP_SUCCESS

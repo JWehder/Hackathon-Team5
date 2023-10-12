@@ -3,6 +3,8 @@ import os
 import google.generativeai as palm
 from dotenv import load_dotenv
 from flask import send_file
+import smtplib
+from email.mime.text import MIMEText
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="text_to_speech_credentials.json"
 
@@ -20,3 +22,13 @@ def convert_text_to_voice(prompt, lesson_name):
             print(f'printing to file: {filename}')
 
         return send_file(filename, as_attachment=True, mimetype='audio/wav')
+
+def send_email(to_address, subject, body):
+    msg = MIMEText(body, "html")
+    msg['Subject'] = subject
+    msg['From'] = os.getenv('EMAIL')
+    msg['To'] = to_address
+
+    with smtplib.SMTP("smtp.zoho.com", 587) as server:
+        server.login(os.getenv('EMAIL'), os.getenv('EMAIL_PASSWORD'))
+        server.sendmail(msg['From'], msg['To'], msg)
