@@ -25,6 +25,7 @@ import { useStore } from '../stores/useUsersStore'
 import { useNavigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { useGoogleLogin } from '@react-oauth/google'
+import Sidebar from './Sidebar'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
@@ -46,9 +47,10 @@ export default function SimpleCard() {
     } 
 
     const googleLogin = useGoogleLogin({
-      onSuccess: tokenResponse =>  setUser(tokenResponse),
+      onSuccess: tokenResponse =>  {
+        setUser(tokenResponse) 
+        navigate('/home')},
       onError: error => console.log("error", error),
-      redirect_uri: 'http://localhost:3000/home',
     })
 
     console.log(user)
