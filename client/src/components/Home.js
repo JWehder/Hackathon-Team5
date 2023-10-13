@@ -23,6 +23,7 @@ import {
   Input,
   FormControl,
 } from '@chakra-ui/react';
+import CourseCarousel from './CourseCarousel';
 
 export default function Dashboard() {
   return (
@@ -64,6 +65,7 @@ export default function Dashboard() {
             style={{ marginTop: 30 }}
             maxW='container.lg'
           >
+            <CourseCarousel />
             <Stack spacing='4'>
               <HStack>
                 <Box>
@@ -94,7 +96,7 @@ export default function Dashboard() {
             style={{ marginTop: 30 }}
             maxW='container.lg'
           >
-            <SimpleGrid
+            {/* <SimpleGrid
               spacing={3}
               templateColumns='repeat(auto-fill, minmax(250px, 1fr))'
             >
@@ -131,7 +133,7 @@ export default function Dashboard() {
                   </Text>
                 </CardBody>
               </Card>
-            </SimpleGrid>
+            </SimpleGrid> */}
           </Container>
         </Box>
       </Flex>
