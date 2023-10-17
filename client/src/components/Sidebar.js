@@ -162,7 +162,11 @@ const MobileNav = ({ onOpen, selectedLink, ...rest }) => {
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2">
-                  <Text fontSize="sm">{user?.first_name + ' ' + user?.last_name}</Text>
+                  {user && (user.first_name || user.last_name) ? (
+                    <Text fontSize="sm">{`${user.first_name || ''} ${user.last_name || ''}`}</Text>
+                  ) : (
+                    <Text fontSize="sm">{user?.name}</Text>
+                  )}
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
                   <FiChevronDown />

@@ -17,10 +17,13 @@ import { useStore } from './stores/useUsersStore';
 function App() {
  const location = useLocation();
  const checkUser = useStore(state => state.getUser)
+ const user = useStore(state => state.user)
 
  useEffect(() => {
   checkUser()
   }, [])
+
+  console.log(user)
 
 
   return (
