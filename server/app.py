@@ -63,7 +63,7 @@ class Signup(Resource):
     def post(self):
         json = request.get_json()
 
-        if not json['email'] or not json['linked_in'] or not json['first_name'] or not json['last_name']:
+        if not json['email'] or not json['first_name'] or not json['last_name']:
             return make_response(jsonify({'error': 'First name, last name, email, and password are required fields'}), HTTP_BAD_REQUEST)
 
         try: 

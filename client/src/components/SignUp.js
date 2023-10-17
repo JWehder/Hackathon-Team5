@@ -18,9 +18,11 @@ import {
 import { AiOutlineEye,  AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
 import { useStore } from '../stores/useUsersStore'
+import { useNavigate } from 'react-router-dom'
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
   const [userInfo, setUserInfo] = useState({
     first_name: '',
     last_name: '',
@@ -33,6 +35,7 @@ export default function SignupCard() {
   function handleSignUp(e) {
     e.preventDefault()
     createUser(userInfo)
+    navigate('/home')
     console.log(userInfo) 
   } 
   
@@ -74,17 +77,17 @@ export default function SignupCard() {
             <form onSubmit={handleSignUp}>
             <HStack>
               <Box>
-                <FormControl id="firstName" isRequired>
+                <FormControl id="first_name" isRequired>
                   <FormLabel>First Name</FormLabel>
                   <Input type="text" 
-                    value={userInfo.firstName} onChange={handleChange} />
+                    value={userInfo.first_name} onChange={handleChange} />
                 </FormControl>
               </Box>
               <Box>
-                <FormControl id="lastName" isRequired>
+                <FormControl id="last_name" isRequired>
                   <FormLabel>Last Name</FormLabel>
                   <Input type="text"
-                  value={userInfo.lastName} onChange={handleChange} />
+                  value={userInfo.last_name} onChange={handleChange} />
                 </FormControl>
               </Box>
             </HStack>

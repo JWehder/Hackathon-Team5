@@ -20,7 +20,6 @@ import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
-import SignUp from './SignUp'
 import { useStore } from '../stores/useUsersStore'
 import { useNavigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -32,14 +31,14 @@ export default function SimpleCard() {
         email: '',
         password: ''
     })
-    const [user, setUser] = useState()
-    const createUser = useStore(state => state.login)
-    const checkUser = useStore(state => state.getUser)
+    const user = useStore(state => state.user)
+    const login = useStore(state => state.login)
+    const oauth = useStore(state => state.oauth)
     const navigate = useNavigate()
 
     const responseFacebook = (response) => {
       console.log(response);
-      createUser(response)
+      oauth(response)
       if (response.accessToken) {
         navigate('/home')
       }
@@ -47,31 +46,22 @@ export default function SimpleCard() {
 
     const googleLogin = useGoogleLogin({
       onSuccess: tokenResponse =>  {
-        createUser(tokenResponse) 
+        console.log(tokenResponse)
+        oauth(tokenResponse)
         navigate('/home')},
       onError: error => console.log("error", error),
     })
 
-    console.log(user)
-
-    useEffect(() => {
-      checkUser()
-    }, [checkUser])
-
-    useEffect(() => {
-      fetch('http://localhost:5555/me')
-      .then(response => response.json())
-      .then(data => setUser(data))
-    }
-    , [])
-
-
     function handleLogin(e) {
       e.preventDefault()
-      createUser(userInfo)
-      console.log(userInfo) 
-      navigate('/home')
+      login(userInfo)
     }
+
+    if (user) {
+      navigate('/home');
+    }
+
+  console.log(user)
 
   return (
     <div>

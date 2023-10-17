@@ -119,13 +119,11 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
 const MobileNav = ({ onOpen, selectedLink, ...rest }) => {
   const logout = useStore((state) => state.logout)
   const user = useStore((state) => state.user)
-  const [userObj, setUserObj] = useState(user)
   const navigate = useNavigate()
 
   console.log(user)
 
   function handleLogout() {
-    setUserObj(null)
     logout()
     navigate('/')
   }
