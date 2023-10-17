@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  useToast
 } from '@chakra-ui/react'
 import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
@@ -34,6 +35,9 @@ export default function SimpleCard() {
     const user = useStore(state => state.user)
     const login = useStore(state => state.login)
     const oauth = useStore(state => state.oauth)
+    const error = useStore(state => state.error)
+    const clearError = useStore(state => state.clearError)  
+    const toast = useToast()
     const navigate = useNavigate()
 
     const responseFacebook = (response) => {
@@ -60,8 +64,28 @@ export default function SimpleCard() {
     if (user) {
       navigate('/home');
     }
+    console.log(error)
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error,
+        status: 'error',
+        position: 'top',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
 
   console.log(user)
+
+  function handleChange(e) {
+    clearError()
+    setUserInfo({
+      ...userInfo,
+      [e.target.id]: e.target.value,
+    })
+  }
 
   return (
     <div>
@@ -129,13 +153,13 @@ export default function SimpleCard() {
           <Stack spacing='4'>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" value={userInfo.email} onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}/>
+              <Input type="email" value={userInfo.email} onChange={handleChange}/>
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
                 <InputGroup>
                     <Input type={show ? 'text' : 'password'} value={userInfo.password}
-                        onChange={(e) => setUserInfo({...userInfo, password: e.target.value})}/>
+                        onChange={handleChange}/>
                     <InputRightElement width='4.5rem'>
                         <Button h="1.75rem" size="sm" 
                                 variant='ghost'

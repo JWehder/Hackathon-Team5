@@ -14,6 +14,7 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast
 } from '@chakra-ui/react'
 import { AiOutlineEye,  AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
@@ -31,16 +32,37 @@ export default function SignupCard() {
     disability:'blind'
   })
   const createUser = useStore(state => state.signup)
+  const user = useStore(state => state.user)
+  const error = useStore(state => state.error)
+  const clearError = useStore(state => state.clearError)
+  const toast = useToast()
 
   function handleSignUp(e) {
     e.preventDefault()
     createUser(userInfo)
-    navigate('/home')
     console.log(userInfo) 
   } 
+
+  console.log(error)
+
+  if (error) {
+    toast({
+      title: "An error occurred.",
+      description: error,
+      position: "top",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    })
+  }
+
+  if (user) {
+    navigate('/home')
+  }
   
 
   function handleChange(e){
+    clearError()
     setUserInfo({
       ...userInfo,
       [e.target.id]: e.target.value,
