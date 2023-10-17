@@ -14,13 +14,16 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast
 } from '@chakra-ui/react'
 import { AiOutlineEye,  AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
 import { useStore } from '../stores/useUsersStore'
+import { useNavigate } from 'react-router-dom'
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
   const [userInfo, setUserInfo] = useState({
     first_name: '',
     last_name: '',
@@ -29,15 +32,37 @@ export default function SignupCard() {
     disability:'blind'
   })
   const createUser = useStore(state => state.signup)
+  const user = useStore(state => state.user)
+  const error = useStore(state => state.error)
+  const clearError = useStore(state => state.clearError)
+  const toast = useToast()
 
   function handleSignUp(e) {
     e.preventDefault()
     createUser(userInfo)
     console.log(userInfo) 
   } 
+
+  console.log(error)
+
+  if (error) {
+    toast({
+      title: "An error occurred.",
+      description: error,
+      position: "top",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    })
+  }
+
+  if (user) {
+    navigate('/home')
+  }
   
 
   function handleChange(e){
+    clearError()
     setUserInfo({
       ...userInfo,
       [e.target.id]: e.target.value,
@@ -74,17 +99,17 @@ export default function SignupCard() {
             <form onSubmit={handleSignUp}>
             <HStack>
               <Box>
-                <FormControl id="firstName" isRequired>
+                <FormControl id="first_name" isRequired>
                   <FormLabel>First Name</FormLabel>
                   <Input type="text" 
-                    value={userInfo.firstName} onChange={handleChange} />
+                    value={userInfo.first_name} onChange={handleChange} />
                 </FormControl>
               </Box>
               <Box>
-                <FormControl id="lastName" isRequired>
+                <FormControl id="last_name" isRequired>
                   <FormLabel>Last Name</FormLabel>
                   <Input type="text"
-                  value={userInfo.lastName} onChange={handleChange} />
+                  value={userInfo.last_name} onChange={handleChange} />
                 </FormControl>
               </Box>
             </HStack>

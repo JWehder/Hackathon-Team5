@@ -1,4 +1,4 @@
-import './App.css';
+import React, { useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { useLocation, Routes, Route } from 'react-router-dom';
 import SignIn from './components/SignIn';
@@ -12,9 +12,20 @@ import Community from './components/Community';
 import Settings from './components/Settings';
 import Ebook from './components/Ebook';
 import Dashboard from './components/Home';
+import { useStore } from './stores/useUsersStore';
 
 function App() {
  const location = useLocation();
+ const checkUser = useStore(state => state.getUser)
+ const user = useStore(state => state.user)
+
+ useEffect(() => {
+  checkUser()
+  }, [])
+
+  console.log(user)
+
+
   return (
     <div className="App">
       <AnimatePresence >
