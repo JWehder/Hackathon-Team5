@@ -40,6 +40,7 @@ import Community from './Community'
 import Settings from './Settings'
 import Ebook from './Ebook'
 import { useStore } from '../stores/useUsersStore'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -118,11 +119,15 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
 const MobileNav = ({ onOpen, selectedLink, ...rest }) => {
   const logout = useStore((state) => state.logout)
   const user = useStore((state) => state.user)
+  const [userObj, setUserObj] = useState(user)
+  const navigate = useNavigate()
 
   console.log(user)
 
   function handleLogout() {
+    setUserObj(null)
     logout()
+    navigate('/')
   }
 
   return (
@@ -178,7 +183,7 @@ const MobileNav = ({ onOpen, selectedLink, ...rest }) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={handleLogout}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

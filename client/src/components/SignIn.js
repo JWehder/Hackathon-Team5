@@ -39,16 +39,17 @@ export default function SimpleCard() {
 
     const responseFacebook = (response) => {
       console.log(response);
-      setUser(response)
+      createUser(response)
       if (response.accessToken) {
         navigate('/home')
       }
     } 
 
     const googleLogin = useGoogleLogin({
-      onSuccess: tokenResponse =>  setUser(tokenResponse),
+      onSuccess: tokenResponse =>  {
+        createUser(tokenResponse) 
+        navigate('/home')},
       onError: error => console.log("error", error),
-      redirect_uri: 'http://localhost:3000/home',
     })
 
     console.log(user)
