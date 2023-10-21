@@ -12,19 +12,16 @@ import Community from './components/Community';
 import Settings from './components/Settings';
 import Ebook from './components/Ebook';
 import Dashboard from './components/Home';
+import ResetPassword from './components/ResetPassword';
 import { useStore } from './stores/useUsersStore';
 
 function App() {
  const location = useLocation();
  const checkUser = useStore(state => state.getUser)
- const user = useStore(state => state.user)
 
  useEffect(() => {
   checkUser()
   }, [])
-
-  console.log(user)
-
 
   return (
     <div className="App">
@@ -41,6 +38,7 @@ function App() {
           <Route exact path='/home/community' element={<Community />} />
           <Route exact path='/home/settings' element={<Settings />} />
           <Route exact path='/home/ebooks/1' element={<Ebook />} />
+          <Route exact path='/resetpassword' element={<ResetPassword />}/>
         </Routes>
       </AnimatePresence>
     </div>

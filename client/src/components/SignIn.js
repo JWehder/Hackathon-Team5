@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react' 
+import React, { useState } from 'react' 
 import {
   Flex,
   Box,
@@ -64,7 +64,7 @@ export default function SimpleCard() {
     if (user) {
       navigate('/home');
     }
-    console.log(error)
+ 
 
     if (error) {
       toast({
@@ -112,9 +112,6 @@ export default function SimpleCard() {
                 <Text fontSize='md' color={'gray.600'}>
                     Please sign in first to access all features
                 </Text>
-                {/* <GoogleLogin
-                  clientId="288451376498-ikvefe1s9v1529ep72nnnr99335kog9t.apps.googleusercontent.com"
-                  render={renderProps => ( */}
                     <Button borderRadius='100'
                     width='100%'
                     bg='white'
@@ -123,17 +120,10 @@ export default function SimpleCard() {
                     colorScheme='google'
                     onClick={() => googleLogin()}
                     leftIcon={<FcGoogle />}>Continue with Google</Button>
-                  {/* )}
-                  buttonText="Login"
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
-                  cookiePolicy={'single_host_origin'}
-                /> */}
                 <FacebookLogin
                   appId='1425952207982191'
                   autoLoad={false}
                   fields='name,email,picture'
-                  // onClick={componentClicked}
                   render={renderProps => (
                     <Button borderRadius='100'
                     width='100%'
@@ -176,7 +166,7 @@ export default function SimpleCard() {
                 align={'start'}
                 justify={'space-between'}>
                 <Checkbox>Keep me signed in</Checkbox>
-                <Text> <Link color={'blue.400'}>Forgot password?</Link></Text>
+                <Text> <Link color={'blue.400'} href='/resetpassword'>Forgot password?</Link></Text>
               </Stack>
               <Button
                 type='submit'
@@ -188,7 +178,7 @@ export default function SimpleCard() {
                 }}>
                 Sign in
               </Button>
-                <Text textAlign='center'>Don't have an account?  <Link href='/signup' color='blue.400'>Sign Up</Link>
+                <Text textAlign='center'>Don't have an account?<Link href='/signup' color='blue.400'>Sign Up</Link>
               </Text>
             </Stack>
           </Stack>

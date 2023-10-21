@@ -19,6 +19,7 @@ export const useStore = create((set) => ({
             set({ isLoading: true });
             const response = await getUser();
             set({ isLoading: false, user: response.data });
+            console.log(response.data)
         } catch(err) {
             set({ error: err.message, isLoading: false });
         }
@@ -28,7 +29,6 @@ export const useStore = create((set) => ({
             set({ isLoading: true, error: null });
             const response = await login(user);
             set({ isLoading: false, user: response.data, error: null })
-            console.log(response.data)
         } catch(err) {
             set({ error: err.response.data.error, isLoading: false })
         }
@@ -44,7 +44,6 @@ export const useStore = create((set) => ({
     },
     signup: async (userData) => {
         try{
-            console.log(userData)
             set({ isLoading: true, error: null });
             const response = await signup(userData);
             set({ isLoading: false, user: response.data });
