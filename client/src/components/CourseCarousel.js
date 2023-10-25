@@ -68,6 +68,16 @@ export default function CourseCarousel() {
                             </Text>
                             </CardBody>
                         </Card>
+                        <Card maxH={{ base: '100%', sm: '200px' }} align='left'>
+                            <CardHeader>
+                            <Button>Web Design</Button>
+                            </CardHeader>
+                            <CardBody>
+                            <Text>
+                                View a summary of all your customers over the last month.
+                            </Text>
+                            </CardBody>
+                        </Card>
                     </GalleryWrap>
                 </List>
                 <StyledIcon as={ArrowRightIcon} onClick={handleNextClick} />
