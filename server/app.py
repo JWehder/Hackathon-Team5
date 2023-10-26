@@ -135,7 +135,7 @@ class CheckSession(Resource):
                 user_dict = user.to_dict()
                 return user_dict, HTTP_SUCCESS
         
-        # return {"error": "you are not logged in"}, 404
+        return {"error": "you are not logged in"}, 404
 
 class TextToVoice(Resource):
     # used generally for synthesizing text
