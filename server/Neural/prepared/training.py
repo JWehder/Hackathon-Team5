@@ -22,7 +22,7 @@ from keras.optimizers import SGD
 # Creating an instance of WordNetLemmatizer.
 lemmatizer = WordNetLemmatizer()
 
-# Loading 'intents.json' which likely contains data related to chatbot intents and their patterns.
+# Loading 'intents.json' which contains data related to chatbot intents and their patterns.
 intents = json.loads(open('intents.json').read())
 
 # Initializing empty lists to store words, tags and documents from the 'intents' JSON file.
@@ -83,9 +83,56 @@ for document in documents:
 # Shuffling the training data.
 random.shuffle(training)
 # Converting the shuffled training data to a NumPy array.
-training = np.array(training)
+# training = np.array(training)
 
 # Splitting the training data into input (X) and output (Y) lists.
-train_x = list(training[:, 0])
-train_y = list(training[:, 1])
+train_x = [pair[0] for pair in training]
+train_y = [pair[1] for pair in training]
 
+# convert the lists to numpy arrays
+train_x = np.array(train_x)
+train_y = np.array(train_y)
+
+# creation of neural model
+# Initializing a sequential neural network model using Keras. 
+# The Sequential model is a linear stack of layers where you can just add one layer at a time.
+model = Sequential()
+
+# Adding a dense (fully connected) layer with 128 neurons. 
+# The input shape corresponds to the length of 'train_x' elements (features). 
+# The activation function used is ReLU (Rectified Linear Unit).
+model.add(Dense(128, input_shape=(len(train_x[0]),), activation='relu'))
+
+# Adding a dropout layer with a rate of 0.5. Dropout is a regularization technique 
+# where randomly selected neurons are ignored during training to prevent overfitting.
+model.add(Dropout(0.5))
+
+# Adding another dense layer with 64 neurons and a ReLU activation function.
+model.add(Dense(64, activation='relu'))
+
+# Adding another dropout layer with a rate of 0.5.
+model.add(Dropout(0.5))
+
+# Adding the final dense layer with a number of neurons equal to the length of 'train_y' elements. 
+# The activation function used here is 'softmax', which makes it suitable for multi-class classification.
+model.add(Dense(len(train_y[0]), activation='softmax'))
+
+# Setting up the Stochastic Gradient Descent (SGD) optimizer with specific parameters:
+# Learning rate (lr) of 0.01, decay rate of 1e-6, momentum of 0.9, and enabling Nesterov momentum.
+sgd = tf.keras.optimizers.legacy.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+
+# Compiling the model, specifying the loss function as 'categorical_crossentropy' 
+# (commonly used for multi-class classification), using the previously defined SGD optimizer, 
+# and setting the metric for evaluation as 'accuracy'.
+model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
+
+# Training (fitting) the model with training data. 
+# Here, it uses the input 'train_x' and output 'train_y' for training, runs for 200 epochs, 
+# uses a batch size of 5 for updates, and provides verbose output (showing progress for each epoch).
+hist = model.fit(np.array(train_x), np.array(train_y), epochs=200, batch_size=5, verbose=1)
+
+# Saving the trained model to a file named 'chatbot_model.model' for later use or deployment.
+model.save('chatbot_model.h5', hist)
+
+# Printing "done" to indicate the end of the process.
+print("done")

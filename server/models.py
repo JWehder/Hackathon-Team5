@@ -2,19 +2,10 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.declarative import declarative_base
 import re
 import secrets
 
 from config import db, bcrypt, MetaData
-
-# Base = declarative_base()
-
-# user_courses = db.Table(
-#     'user_courses', Base.metadata,
-#     db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-#     db.Column('course_id', db.Integer, db.ForeignKey('courses.id'))
-# )
 
 class Base(db.Model, SerializerMixin):
     __abstract__ = True

@@ -19,6 +19,9 @@ python-dotenv = "*"
 google-generativeai = "*"
 oauth = "*"
 authlib = "*"
+numpy = "*"
+nltk = "*"
+tensorflow = "*"
 
 [dev-packages]
 
