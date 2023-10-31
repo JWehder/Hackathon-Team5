@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react' 
+import React, { useState } from 'react' 
 import {
   Flex,
   Box,
@@ -15,12 +15,12 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  useToast
 } from '@chakra-ui/react'
 import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
-import SignUp from './SignUp'
 import { useStore } from '../stores/useUsersStore'
 import { useNavigate } from 'react-router-dom'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
@@ -32,45 +32,60 @@ export default function SimpleCard() {
         email: '',
         password: ''
     })
-    const [user, setUser] = useState()
-    const createUser = useStore(state => state.login)
-    const checkUser = useStore(state => state.getUser)
+    const user = useStore(state => state.user)
+    const login = useStore(state => state.login)
+    const oauth = useStore(state => state.oauth)
+    const error = useStore(state => state.error)
+    const clearError = useStore(state => state.clearError)  
+    const toast = useToast()
     const navigate = useNavigate()
 
     const responseFacebook = (response) => {
       console.log(response);
-      setUser(response)
+      oauth(response)
       if (response.accessToken) {
         navigate('/home')
       }
     } 
 
     const googleLogin = useGoogleLogin({
-      onSuccess: tokenResponse =>  setUser(tokenResponse),
+      onSuccess: tokenResponse =>  {
+        console.log(tokenResponse)
+        oauth(tokenResponse)
+        navigate('/home')},
       onError: error => console.log("error", error),
-      redirect_uri: 'http://localhost:3000/home',
     })
-
-    console.log(user)
-
-    useEffect(() => {
-      checkUser()
-    }, [checkUser])
-
-    useEffect(() => {
-      fetch('http://localhost:5555/me')
-      .then(response => response.json())
-      .then(data => setUser(data))
-    }
-    , [])
-
 
     function handleLogin(e) {
       e.preventDefault()
-      createUser(userInfo)
-      console.log(userInfo) 
-      navigate('/home')
+      login(userInfo)
     }
+
+    if (user) {
+      navigate('/home');
+    }
+ 
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error,
+        status: 'error',
+        position: 'top',
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+
+  console.log(user)
+
+  function handleChange(e) {
+    clearError()
+    setUserInfo({
+      ...userInfo,
+      [e.target.id]: e.target.value,
+    })
+  }
 
   return (
     <div>
@@ -97,9 +112,6 @@ export default function SimpleCard() {
                 <Text fontSize='md' color={'gray.600'}>
                     Please sign in first to access all features
                 </Text>
-                {/* <GoogleLogin
-                  clientId="288451376498-ikvefe1s9v1529ep72nnnr99335kog9t.apps.googleusercontent.com"
-                  render={renderProps => ( */}
                     <Button borderRadius='100'
                     width='100%'
                     bg='white'
@@ -108,17 +120,10 @@ export default function SimpleCard() {
                     colorScheme='google'
                     onClick={() => googleLogin()}
                     leftIcon={<FcGoogle />}>Continue with Google</Button>
-                  {/* )}
-                  buttonText="Login"
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
-                  cookiePolicy={'single_host_origin'}
-                /> */}
                 <FacebookLogin
                   appId='1425952207982191'
                   autoLoad={false}
                   fields='name,email,picture'
-                  // onClick={componentClicked}
                   render={renderProps => (
                     <Button borderRadius='100'
                     width='100%'
@@ -138,13 +143,13 @@ export default function SimpleCard() {
           <Stack spacing='4'>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" value={userInfo.email} onChange={(e) => setUserInfo({...userInfo, email: e.target.value})}/>
+              <Input type="email" value={userInfo.email} onChange={handleChange}/>
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
                 <InputGroup>
                     <Input type={show ? 'text' : 'password'} value={userInfo.password}
-                        onChange={(e) => setUserInfo({...userInfo, password: e.target.value})}/>
+                        onChange={handleChange}/>
                     <InputRightElement width='4.5rem'>
                         <Button h="1.75rem" size="sm" 
                                 variant='ghost'
@@ -161,7 +166,7 @@ export default function SimpleCard() {
                 align={'start'}
                 justify={'space-between'}>
                 <Checkbox>Keep me signed in</Checkbox>
-                <Text> <Link color={'blue.400'}>Forgot password?</Link></Text>
+                <Text> <Link color={'blue.400'} href='/resetpassword'>Forgot password?</Link></Text>
               </Stack>
               <Button
                 type='submit'
@@ -173,7 +178,7 @@ export default function SimpleCard() {
                 }}>
                 Sign in
               </Button>
-                <Text textAlign='center'>Don't have an account?  <Link href='/signup' color='blue.400'>Sign Up</Link>
+                <Text textAlign='center'>Don't have an account?<Link href='/signup' color='blue.400'>Sign Up</Link>
               </Text>
             </Stack>
           </Stack>

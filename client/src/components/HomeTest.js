@@ -33,7 +33,7 @@ export default function Dashboard() {
         <Box w='100%' p={4} md={2}>
           <Container
             textAlign='center'
-            fluid
+            fluid='true'
             style={{ marginTop: 0 }}
             maxW='container.lg'
           >
@@ -63,7 +63,7 @@ export default function Dashboard() {
           </Container>
           <Container
             textAlign='center'
-            fluid
+            fluid='true'
             style={{ marginTop: 30 }}
             maxW='container.lg'
           >
@@ -94,7 +94,7 @@ export default function Dashboard() {
           </Container>
           <Container
             textAlign='center'
-            fluid
+            fluid='true'
             style={{ marginTop: 30 }}
             maxW='container.lg'
           >
