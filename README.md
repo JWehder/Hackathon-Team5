@@ -7,6 +7,10 @@ Our application helps disabled individuals learn efficiently by providing curate
 - [Design](https://www.figma.com/file/wHSlfmM3IHzKzwg9gMjzP2/HACKATON-FLATIRON?type=design&node-id=803-7654&mode=design)
 - [Trello Board](https://trello.com/b/4bgT5ccf/learn-link)
 
+## Quick Walkthrough
+
+[Video](https://www.veed.io/view/ef9f79ed-dfe7-4c5d-8be5-412b5132b7b4?panel=share)
+
 ## Under Construction
 
 Environment setup instructions to come soon! We are currently working on providing an MVP for this project.
