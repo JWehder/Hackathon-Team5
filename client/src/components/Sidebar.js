@@ -13,8 +13,6 @@ import {
   Drawer,
   DrawerContent,
   useDisclosure,
-  BoxProps,
-  FlexProps,
   Menu,
   MenuButton,
   MenuDivider,
@@ -35,10 +33,14 @@ import { TfiBookmarkAlt } from 'react-icons/tfi'
 import Logo from '../assets/main-logo.png'
 import Home from './Home'
 import EBooks from './Ebooks'
+import Dashboard from './HomeTest'
 import Courses from './Courses'
 import CompletedCourses from './CompletedCourses'
 import Community from './Community'
 import Settings from './Settings'
+import Ebook from './Ebook'
+import { useStore } from '../stores/useUsersStore'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -83,7 +85,6 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
   return (
     <Box
       as="a"
-    //   href={linkName}
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
       onClick={() => setSelectedLink(linkName)}>
@@ -95,7 +96,7 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
+          bg: '#2F4CED',
           color: 'white',
         }}
         {...rest}>
@@ -115,7 +116,18 @@ const NavItem = ({ icon, children, setSelectedLink, selectedLink, linkName, ...r
   )
 }
 
-const MobileNav = ({ onOpen, ...rest }) => {
+const MobileNav = ({ onOpen, selectedLink, ...rest }) => {
+  const logout = useStore((state) => state.logout)
+  const user = useStore((state) => state.user)
+  const navigate = useNavigate()
+
+  console.log(user)
+
+  function handleLogout() {
+    logout()
+    navigate('/')
+  }
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -135,10 +147,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
         icon={<FiMenu />}
       />
 
-      <Box mx='auto' width='150px'>
-        <img src={Logo} alt='logo' width='150' height='150'/>
-      </Box>
-
       <HStack spacing={{ base: '0', md: '6' }}>
         <IconButton size="lg" variant="ghost" aria-label="open menu" icon={<FiBell />} />
         <Flex alignItems={'center'}>
@@ -147,19 +155,18 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <HStack>
                 <Avatar
                   size={'sm'}
-                  src={
-                    'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                  }
+                  bg='#2F4CED'
                 />
                 <VStack
                   display={{ base: 'none', md: 'flex' }}
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2">
-                  <Text fontSize="sm">Justina Clark</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    Admin
-                  </Text>
+                  {user && (user.first_name || user.last_name) ? (
+                    <Text fontSize="sm">{`${user.first_name || ''} ${user.last_name || ''}`}</Text>
+                  ) : (
+                    <Text fontSize="sm">{user?.name}</Text>
+                  )}
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
                   <FiChevronDown />
@@ -173,7 +180,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={handleLogout}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>
@@ -201,11 +208,11 @@ const SidebarWithHeader = () => {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
+      <MobileNav onOpen={onOpen} selectedLink={selectedLink}/>
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
-          {selectedLink === 'Home' && <Home />}
-          {selectedLink === 'eBooks' && <EBooks />}
+          {selectedLink === 'Home' && <Dashboard />}
+          {selectedLink === 'eBooks' && <Ebook />}
           {selectedLink === 'Courses' && <Courses />}
           {selectedLink === 'Completed Courses' && <CompletedCourses />}
           {selectedLink === 'Community' && <Community />}

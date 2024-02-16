@@ -1,0 +1,23 @@
+{"intents": [
+    {"tag": "greetings",
+    "patterns": ["hello", "hi", "good day", "greetings", "what's up?", "how are you?"],
+    "responses": ["Hello", "Hey!", "How can I help you?"]   
+    },
+    {"tag": "courses",
+    "patterns": ["What courses are available?", "How can I sign up for a course?", "Where can I find my courses?"],
+    "responses": ["There are plenty of courses are available, including programming courses, math courses, courses on history etc. You can find our full selection on the home page", "You can sign up for a course using the sign up button on the left side of the course page beneath the course title", "You can find your courses within the my courses page which is navigateable using the left column of the page and selecting 'My courses'"]   
+    },
+    {"tag": "goodbyes",
+    "patterns": ["goodbye", "adios", "bye", "seeya later"],
+    "responses": ["Goodbye, please come back again!", "Thank you for coming! Hope to see you soon!", "Hope to speak to you soon!", "Bye, talk soon!", "Bye, I hope I helped!"]   
+    },
+    {"tag": "help",
+    "patterns": ["can you help", "where to find the courses", "text to speech is not working", "summarize feature is not working"],
+    "responses": ["have you checked out our FAQ page?",  "What issues are you experiencing?"]   
+    },
+    {"tag": "name",
+    "patterns": ["What is your name?", "What should I call you?", "who are you?"],
+    "responses": ["I'm your autonomous bot friend, LearnBot!", "You can call me LearnBot. How may I help?", "The name is LearnBot, great to meet you!"]   
+    }
+
+]}

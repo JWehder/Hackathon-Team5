@@ -14,12 +14,61 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast
 } from '@chakra-ui/react'
 import { AiOutlineEye,  AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
+import { useStore } from '../stores/useUsersStore'
+import { useNavigate } from 'react-router-dom'
 
 export default function SignupCard() {
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
+  const [userInfo, setUserInfo] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    disability:'blind'
+  })
+  const createUser = useStore(state => state.signup)
+  const user = useStore(state => state.user)
+  const error = useStore(state => state.error)
+  const clearError = useStore(state => state.clearError)
+  const toast = useToast()
+
+  function handleSignUp(e) {
+    e.preventDefault()
+    createUser(userInfo)
+    console.log(userInfo) 
+  } 
+
+  console.log(error)
+
+  if (error) {
+    toast({
+      title: "An error occurred.",
+      description: error,
+      position: "top",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    })
+  }
+
+  if (user) {
+    navigate('/home')
+  }
+  
+
+  function handleChange(e){
+    clearError()
+    setUserInfo({
+      ...userInfo,
+      [e.target.id]: e.target.value,
+    })
+  }
+
 
   return (
     <Flex
@@ -47,28 +96,33 @@ export default function SignupCard() {
                 </Text>
             </Stack>
           <Stack spacing={4}>
+            <form onSubmit={handleSignUp}>
             <HStack>
               <Box>
-                <FormControl id="firstName" isRequired>
+                <FormControl id="first_name" isRequired>
                   <FormLabel>First Name</FormLabel>
-                  <Input type="text" />
+                  <Input type="text" 
+                    value={userInfo.first_name} onChange={handleChange} />
                 </FormControl>
               </Box>
               <Box>
-                <FormControl id="lastName" isRequired>
+                <FormControl id="last_name" isRequired>
                   <FormLabel>Last Name</FormLabel>
-                  <Input type="text" />
+                  <Input type="text"
+                  value={userInfo.last_name} onChange={handleChange} />
                 </FormControl>
               </Box>
             </HStack>
             <FormControl id="email" isRequired>
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input type="email"
+              value={userInfo.email} onChange={handleChange} />
             </FormControl>
             <FormControl id="password" isRequired>
               <FormLabel>Password</FormLabel>
               <InputGroup>
-                <Input type={showPassword ? 'text' : 'password'} />
+                <Input type={showPassword ? 'text' : 'password'}
+                  value={userInfo.password} onChange={handleChange} />
                 <InputRightElement width="4.5rem">
                   <Button
                     h="1.75rem" size="sm"
@@ -81,6 +135,7 @@ export default function SignupCard() {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
+                type='submit'
                 borderRadius='100'
                 loadingText="Submitting"
                 size="lg"
@@ -97,6 +152,7 @@ export default function SignupCard() {
                 Already a user? <Link href='/' color='blue.400'>Login</Link>
               </Text>
             </Stack>
+          </form>
           </Stack>
         </Box>
       </Stack>

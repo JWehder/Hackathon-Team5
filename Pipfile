@@ -17,6 +17,11 @@ flask-cors = "3.0.10"
 google-cloud-texttospeech = "*"
 python-dotenv = "*"
 google-generativeai = "*"
+oauth = "*"
+authlib = "*"
+numpy = "*"
+nltk = "*"
+tensorflow = "*"
 
 [dev-packages]
 

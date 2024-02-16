@@ -8,7 +8,7 @@ from sqlalchemy import MetaData
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://localhost:3000"])
 app.secret_key = b'Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,10 +28,11 @@ api = Api(app)
 
 oauth = OAuth(app)
 
-from routes import root_bp
-from routes import lesson_bp
-from routes import course_bp
+# from routes import root_bp
+# from routes import lesson_bp
+# from routes import course_bp
+# from models import User, Lesson, Course
 
-app.register_blueprint(root_bp)
-app.register_blueprint(lesson_bp)
-app.register_blueprint(course_bp)
+# app.register_blueprint(root_bp)
+# app.register_blueprint(lesson_bp)
+# app.register_blueprint(course_bp)
