@@ -20,7 +20,6 @@ import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Logo from '../assets/main-logo.png'
-import SignUp from './SignUp'
 
 export default function SimpleCard() {
     const [show, setShow] = useState(false)
